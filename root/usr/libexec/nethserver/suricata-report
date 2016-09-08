@@ -1,0 +1,18 @@
+#!/bin/bash
+
+FILE=$1
+
+if [ ! -f $FILE ]; then
+    exit 1
+fi
+
+base=$(basename "$FILE")
+ext="${base##*.}"
+
+
+if [ "$ext" == "gz" ]; then
+    /bin/zcat $FILE | /usr/share/snortalog/snortalog.pl -a -attack
+else
+    /usr/share/snortalog/snortalog.pl -a -attack < $FILE
+fi
+
