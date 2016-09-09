@@ -1,0 +1,16 @@
+{
+  #
+  # issue 5104 -- Replace Snort with Suricata
+  #
+
+  use esmith::ConfigDB;
+  my $cdb = esmith::ConfigDB->open();
+
+  my $suricataStatus;
+  if ($suricataStatus = $cdb->get_prop_and_delete('snortd', 'status')){
+      $cdb->set_prop('suricata',$suricataStatus);
+      $cdb->get('snortd')->delete;
+  }
+
+  '';   
+}
