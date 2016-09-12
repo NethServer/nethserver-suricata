@@ -8,7 +8,8 @@
 
   my $suricataStatus;
   if ($suricataStatus = $cdb->get_prop_and_delete('snortd', 'status')){
-      $cdb->set_prop('suricata',$suricataStatus);
+      $cdb->new_record('suricata',{ 'type' => 'service' });
+      $cdb->set_prop('suricata','status',$suricataStatus);
       $cdb->get('snortd')->delete;
   }
 
