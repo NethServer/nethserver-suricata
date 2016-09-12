@@ -7,8 +7,7 @@ Source0: %{name}-%{version}.tar.gz
 
 BuildArch: noarch
 
-Requires: suricata, snortalog
-Requires: perl-GDGraph
+Requires: suricata
 Requires: nethserver-firewall-base, nethserver-pulledpork
 
 Conflicts: nethserver-snort
