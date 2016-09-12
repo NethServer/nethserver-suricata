@@ -23,8 +23,8 @@ vars:
         my $net = esmith::util::computeLocalNetworkShortSpec($addr, $mask || '255.255.255.255');
         push(@nets, $net);
     }
-    $OUT .= "    HOME_NET \"[".join(',',@nets)."]\"\n";
-    $OUT .= "    DNS_SERVERS \"[".$dns{'NameServers'}."]\"\n";
+    $OUT .= "    HOME_NET: \"[".join(',',@nets)."]\"\n";
+    $OUT .= "    DNS_SERVERS: \"[".$dns{'NameServers'}."]\"\n";
 }
 
     EXTERNAL_NET: "!$HOME_NET"
