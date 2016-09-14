@@ -30,7 +30,8 @@ $event = "nethserver-suricata-update";
 event_templates($event,
     '/etc/sysconfig/suricata',
     '/etc/suricata/suricata.yaml',
-    '/etc/sudoers'
+    '/etc/sudoers',
+    '/etc/logrotate.d/suricata'
 );
 
 event_services($event, 'suricata' => 'restart');
@@ -45,6 +46,7 @@ $event = "nethserver-suricata-save";
 event_templates($event,
     '/etc/sysconfig/suricata',
     '/etc/suricata/suricata.yaml',
+    '/etc/logrotate.d/suricata'
 );
 
 event_services($event, 'suricata' => 'restart');
