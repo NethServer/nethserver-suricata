@@ -12,7 +12,6 @@
 vars:
   # more specifc is better for alert accuracy and performance
   address-groups:
-    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
 {
     use esmith::util;
     use esmith::NetworksDB;
@@ -48,7 +47,7 @@ vars:
     SSH_PORTS: 22
     DNP3_PORTS: 20000
     MODBUS_PORTS: 502
-
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
 
 ##
 ## Step 2: select the rules to enable or disable
