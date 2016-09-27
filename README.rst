@@ -8,7 +8,6 @@ NFQUEUE is an iptables and ip6tables target which delegate the decision on packe
 All traffic will be analyzed by Suricata itself.
 
 Suricata rules are managed by Pulledpork.
-Alert logs are parsed by SnortALog and are available inside the Dashboard. 
 
 Manually enable/disable Suricata
 ================================
