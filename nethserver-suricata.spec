@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 0.0.0
+Version: 1.0.0
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -44,4 +44,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Sep 28 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.0-1
+- Replace Snort with Suricata - NethServer/dev#5104
+
 
