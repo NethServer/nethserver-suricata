@@ -22,6 +22,12 @@ vars:
         my $net = esmith::util::computeLocalNetworkShortSpec($addr, $mask || '255.255.255.255');
         push(@nets, $net);
     }
+    foreach ($ndb->red()) {
+        my $addr = $_->prop('ipaddr') || next;
+        my $mask = $_->prop('netmask') || next;
+        my $net = esmith::util::computeLocalNetworkShortSpec($addr, $mask);
+        push(@nets, $net);
+    }
     $OUT .= "    HOME_NET: \"[".join(',',@nets)."]\"\n";
     $OUT .= "    DNS_SERVERS: \"[".$dns{'NameServers'}."]\"\n";
 }
