@@ -84,7 +84,7 @@ default-log-dir: /var/log/suricata/
 
 # global stats configuration
 stats:
-  enabled: yes
+  enabled: no
   # The interval field (in seconds) controls at what interval
   # the loggers are invoked.
   interval: 600
@@ -100,7 +100,7 @@ outputs:
 
   # Extensible Event Format (nicknamed EVE) event log in JSON format
   - eve-log:
-      enabled: {{$suricata{EveLog} || 'no'}}
+      enabled: yes
       filetype: regular #regular|syslog|unix_dgram|unix_stream|redis
       filename: eve.json
       #prefix: "@cee: " # prefix to prepend to each log entry
@@ -149,20 +149,20 @@ outputs:
               # than one IP address is present, the last IP address will be the
               # one taken into consideration.
               header: X-Forwarded-For
-        - http:
-            extended: yes     # enable this for extended logging information
+        # - http:
+            # extended: yes     # enable this for extended logging information
             # custom allows additional http fields to be included in eve-log
             # the example below adds three additional fields when uncommented
             #custom: [Accept-Encoding, Accept-Language, Authorization]
-        - dns
-        - tls:
-            extended: yes     # enable this for extended logging information
-        - files:
-            force-magic: no   # force logging magic on all logged files
-            force-md5: no     # force logging of md5 checksums
-        #- drop:
-        #    alerts: no       # log alerts that caused drops
-        - smtp:
+        # - dns
+        # - tls:
+            # extended: yes     # enable this for extended logging information
+        # - files:
+            # force-magic: no   # force logging magic on all logged files
+            # force-md5: no     # force logging of md5 checksums
+        - drop:
+            alerts: yes       # log alerts that caused drops
+        # - smtp:
             #extended: yes # enable this for extended logging information
             # this includes: bcc, message-id, subject, x_mailer, user-agent
             # custom fields logging from the list:
@@ -175,13 +175,13 @@ outputs:
             # to yes
             #md5: [body, subject]
 
-        - ssh
-        - stats:
-            totals: yes       # stats for all threads merged together
-            threads: no       # per thread stats
-            deltas: no        # include delta values
+        # - ssh
+        # - stats:
+            # totals: yes       # stats for all threads merged together
+            # threads: no       # per thread stats
+            # deltas: no        # include delta values
         # bi-directional flows
-        - flow
+        # - flow
         # uni-directional flows
         #- netflow
 
@@ -317,7 +317,7 @@ outputs:
 
   # Stats.log contains data from various counters of the suricata engine.
   - stats:
-      enabled: yes
+      enabled: no
       filename: stats.log
       totals: yes       # stats for all threads merged together
       threads: no       # per thread stats
@@ -335,7 +335,7 @@ outputs:
 
   # a line based information for dropped packets in IPS mode
   - drop:
-      enabled: yes
+      enabled: no
       filename: drop.log
       append: yes
       #filetype: regular # 'regular', 'unix_stream' or 'unix_dgram'

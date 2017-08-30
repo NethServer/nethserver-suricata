@@ -1,4 +1,4 @@
-/var/log/suricata/*.log \{
+/var/log/suricata/*.log /var/log/suricata/*.json \{
         daily
         missingok
         rotate 5
@@ -7,16 +7,3 @@
         copytruncate
         minsize 500k
 \}
-{
-    if ($suricata{EveLog} eq 'yes'){
-        $OUT='/var/log/suricata/eve.json {
-        daily
-        missingok
-        rotate 1
-        compress
-        delaycompress
-        copytruncate
-        minsize 500k
-}';
-    }
-}
