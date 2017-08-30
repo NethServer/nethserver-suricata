@@ -1,0 +1,14 @@
+
+{
+    use esmith::NetworksDB;
+    my $ndb = esmith::NetworksDB->open_ro();
+    for my $ether ($ndb->green()) {
+        my $ipaddr = $ether->prop('ipaddr') || next;
+        my $bootproto = $ether->prop('bootproto') || 'none';
+        next if ($bootproto ne 'none');
+        $OUT .= "# disable FP for wpad.dat\n";
+        $OUT .= "suppress gen_id 1, sig_id 2022913, track by_dst, ip $ipaddr\n";
+        $OUT .= "# disable FP for hylafax\n";
+        $OUT .= "suppress gen_id 1, sig_id 2011124, track by_src, ip $ipaddr\n";
+    }
+}
