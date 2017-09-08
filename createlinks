@@ -30,7 +30,7 @@ $event = "nethserver-suricata-update";
 event_templates($event,
     '/etc/sysconfig/suricata',
     '/etc/suricata/suricata.yaml',
-    '/etc/sudoers',
+    '/etc/suricata/threshold.config',
     '/etc/logrotate.d/suricata'
 );
 
@@ -46,6 +46,7 @@ $event = "nethserver-suricata-save";
 event_templates($event,
     '/etc/sysconfig/suricata',
     '/etc/suricata/suricata.yaml',
+    '/etc/suricata/threshold.config',
     '/etc/logrotate.d/suricata'
 );
 
@@ -58,6 +59,18 @@ event_services($event, 'suricata' => 'restart');
 $event = "trusted-networks-modify";
 event_templates($event,
     '/etc/suricata/suricata.yaml',
+);
+
+event_services($event, 'suricata' => 'restart');
+
+#--------------------------------------------------
+# actions for interface-update event
+#--------------------------------------------------
+
+$event = "interface-update";
+event_templates($event,
+    '/etc/suricata/suricata.yaml',
+    '/etc/suricata/threshold.config'
 );
 
 event_services($event, 'suricata' => 'restart');

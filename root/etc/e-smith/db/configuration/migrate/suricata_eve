@@ -1,0 +1,4 @@
+# eve.json is always enabled
+{
+  $DB->get_prop_and_delete('suricata','EveLog');
+}
