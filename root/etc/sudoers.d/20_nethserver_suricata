@@ -1,0 +1,6 @@
+#
+# 20_nethserver_suricata
+#
+%adm ALL=NOPASSWD: /usr/libexec/nethserver/suricata-list-categories
+
+

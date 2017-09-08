@@ -29,18 +29,27 @@ use Nethgui\System\PlatformInterface as Validate;
  */
 class IPS extends \Nethgui\Controller\AbstractController
 {
-    private $policies = array('connectivity','balanced','security','expert');
+    private $categories = array();
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
     {
         return \Nethgui\Module\SimpleModuleAttributesProvider::extendModuleAttributes($base, 'Gateway');
     }
 
+    private function readCategories()
+    {
+       if(!$this->categories) {
+           $this->categories = json_decode($this->getPlatform()->exec('sudo /usr/libexec/nethserver/suricata-list-categories')->getOutput(), TRUE);
+       }
+    }
+
     public function initialize()
     {
-        parent::initialize();
+        $this->readCategories();
+        $cvalidator = $this->createValidator(Validate::ANYTHING_COLLECTION)->collectionValidator($this->createValidator()->memberOf($this->categories));
         $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'suricata', 'status'), array('configuration', 'firewall', 'nfqueue')));
-        $this->declareParameter('Policy', $this->createValidator()->memberOf($this->policies), array('configuration', 'pulledpork', 'Policy'));
+        $this->declareParameter('RuleCategories', $cvalidator, array('configuration', 'suricata', 'RuleCategories', ','));
+        parent::initialize();
     }
 
     public function readStatus($status1, $status2)
@@ -55,7 +64,6 @@ class IPS extends \Nethgui\Controller\AbstractController
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-pulledpork-save');
         $this->getPlatform()->signalEvent('nethserver-suricata-save');
         $this->getPlatform()->signalEvent('firewall-adjust');
     }
@@ -63,9 +71,10 @@ class IPS extends \Nethgui\Controller\AbstractController
     public function prepareView(\Nethgui\View\ViewInterface $view) 
     {
         parent::prepareView($view);
-        $view['PolicyDatasource'] =  array_map(function($fmt) use ($view) {
+        $this->readCategories();
+        $view['RuleCategoriesDatasource'] =  array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->policies);
+        }, $this->categories);
 
     }
 
