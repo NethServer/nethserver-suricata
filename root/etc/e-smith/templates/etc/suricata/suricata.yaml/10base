@@ -62,12 +62,20 @@ vars:
 default-rule-path: /etc/suricata/rules
 rule-files:
 {
-    $categories = $suricata{'RuleCategories'} || '';
-    foreach (split(',',$categories)) {
+    $blockCategories = $suricata{'BlockCategories'} || '';
+    $alertCategories = $suricata{'AlertCategories'} || '';
+    foreach (split(',',$blockCategories)) {
         if ( -f "/etc/suricata/rules/$_.rules" ) {
             $OUT .= " - $_.rules\n";
         }
     }
+
+    foreach (split(',',$alertCategories)) {
+        if ( -f "/etc/suricata/rules/$_.rules" ) {
+            $OUT .= " - $_.rules\n";
+        }
+    }
+
 }
 
 classification-file: /etc/suricata/classification.config
