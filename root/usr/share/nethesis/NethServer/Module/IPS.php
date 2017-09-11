@@ -80,7 +80,9 @@ class IPS extends \Nethgui\Controller\AbstractController
     public function process()
     {
         parent::process();
-
+        if ($this->getRequest()->hasParameter('download')) {
+            $this->getPlatform()->signalEvent('nethserver-pulledpork-save');
+        }
         if ($this->getRequest()->isMutation()) {
             $block = array();
             $alert = array();
@@ -141,9 +143,19 @@ class IPS extends \Nethgui\Controller\AbstractController
         parent::prepareView($view);
         $this->readCategories();
 
+        $view['download'] = $view->getModuleUrl('/IPS?download');
         $view['actions'] = array('disable' => $view->translate('disable_label'), 'alert' => $view->translate('alert_label'), 'block' => $view->translate('block_label'));
         $view['categories'] = $this->selectableCategories;
     }
+
+    public function nextPath()
+    {
+        if ($this->getRequest()->hasParameter('download')) {
+            return "IPS";
+        }
+        return parent::nextPath();
+    }
+
 
 }
 
