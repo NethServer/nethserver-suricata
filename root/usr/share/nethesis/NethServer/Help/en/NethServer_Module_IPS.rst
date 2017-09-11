@@ -8,13 +8,13 @@ possible attacks and policy violations.
 
 Depending on the configuration, the IPS can report a threat or block involved traffic.
 
-Enabled/Disabled
+Enabled Suricata IP
     Enable or disable the IPS
 
-Rule policy
-   Select the group of rules to be applied. There are 4 policy: 
+Rule categories
+   Each rule category can be:
 
-   * Connectivity: check a large number of vulnerabilities, it does not impact on non-realtime applications (eg VoIP) 
-   * Balanced: suitable for most scenarios, it is a good compromise between security and usability (recommended) 
-   * Security: safe mode but very invasive, may impact on chat applications and peer-to-peer 
-   * Expert: the administrator must manually select the rules from the command line
+   - Enable: traffic matching rules from this categories will be reported
+   - Block: traffic matching rules from this categories will be dropped
+   - Disable: rules from this categories are ignored
+
