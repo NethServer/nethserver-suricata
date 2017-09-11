@@ -17,7 +17,8 @@ if (!$view['categories']) {
             $view->selector('Categories_'.$category, $view::SELECTOR_DROPDOWN | $view::LABEL_LEFT)->setAttribute('choices',  \Nethgui\Widget\XhtmlWidget::hashToDatasource($view['actions']))
         );
     }
-    echo "<div class='ruleCategories'>".$T('RuleCategories_label')."</div>";
+    echo "<div class='ruleCategories'>".$T('RuleCategories_label');
+    echo "<div class='ruleDoc'>".$T('see_doc_label').": <a href='http://docs.nethserver.org/en/v7/suricata.html' target='_blank'>".$T('manual_label')."</a></div></div>";
     echo "<div class='ruleColumns'>";
     echo $fieldset;
     echo "</div>";
@@ -42,5 +43,12 @@ $view->includeCss("
     margin: 8px;
     padding: .8em;
     display: inline-block;
+}
+.ruleDoc {
+    font-weight: normal;
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #eee;
+    width: 300px;
 }
 ");
