@@ -3,12 +3,52 @@
 echo $view->header()->setAttribute('template', $T('IPS_header'));
 
 echo $view->panel()
-     ->insert($view->fieldset()->setAttribute('template',$T('status_label'))
-        ->insert($view->fieldsetSwitch('status', 'enabled', $view::FIELDSETSWITCH_EXPANDABLE)
-            ->insert($view->selector('Policy', $view::SELECTOR_DROPDOWN))
-        )
-        ->insert($view->fieldsetSwitch('status', 'disabled'))
+     ->insert($view->fieldset()->setAttribute('template',$T('IPS_status_label'))
+        ->insert($view->checkbox('status', 'enabled', $view::FIELDSETSWITCH_CHECKBOX)->setAttribute('uncheckedValue', 'disabled'))
      );
 
-echo $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP);
 
+if (!$view['categories']) {
+     echo "<div class='wspreline ui-state-warning ui-state-highlight noRules ruleCategories'><i class='fa'></i>".$T('no_rules_label')."</div>";
+} else {
+    $fieldset = $view->panel();
+    foreach($view['categories'] as $category) {
+        $fieldset->insert(
+            $view->selector('Categories_'.$category, $view::SELECTOR_DROPDOWN | $view::LABEL_LEFT)->setAttribute('choices',  \Nethgui\Widget\XhtmlWidget::hashToDatasource($view['actions']))
+        );
+    }
+    echo "<div class='ruleCategories'>".$T('RuleCategories_label');
+    echo "<div class='ruleDoc'>".$T('see_doc_label').": <a href='http://docs.nethserver.org/en/v7/suricata.html' target='_blank'>".$T('manual_label')."</a></div></div>";
+    echo "<div class='ruleColumns'>";
+    echo $fieldset;
+    echo "</div>";
+}
+$buttons =  $view->buttonList($view::BUTTON_SUBMIT | $view::BUTTON_HELP);
+$buttons->insert($view->button('download', $view::BUTTON_LINK));
+echo $buttons;
+
+$view->includeCss("
+.ruleColumns {
+    column-count: 2;
+    margin-left: 10px;
+}
+.ruleCategories {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.noRules {
+    border: 1px solid #f8893f;
+    color: #592003;
+    background-color: #fee4bd;
+    margin: 8px;
+    padding: .8em;
+    display: inline-block;
+}
+.ruleDoc {
+    font-weight: normal;
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #eee;
+    width: 300px;
+}
+");

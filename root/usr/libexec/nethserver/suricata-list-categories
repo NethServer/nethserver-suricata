@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+
+use JSON;
+use File::Glob ':bsd_glob';
+use File::Basename;
+
+my @categories;
+while (my $file = </etc/suricata/rules/*rules>) {
+    next if ( ! -f $file);
+    my $name = basename($file,('.rules'));
+    push(@categories,$name);
+}
+
+print encode_json(\@categories);

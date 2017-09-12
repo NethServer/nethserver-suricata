@@ -29,19 +29,97 @@ use Nethgui\System\PlatformInterface as Validate;
  */
 class IPS extends \Nethgui\Controller\AbstractController
 {
-    private $policies = array('connectivity','balanced','security','expert');
+    public $categories = array();
+    public $selectableCategories = array();
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
     {
         return \Nethgui\Module\SimpleModuleAttributesProvider::extendModuleAttributes($base, 'Gateway');
     }
 
+    private function readCategories()
+    {
+       if(!$this->categories) {
+           $this->categories = json_decode($this->getPlatform()->exec('sudo /usr/libexec/nethserver/suricata-list-categories')->getOutput(), TRUE);
+           // hide all non-ET categories
+           foreach ($this->categories as $category) {
+               if (strpos($category,'ET') === 0) {
+                   $this->selectableCategories[] = $category;
+               }
+           }
+       }
+    }
+
+    public function bind(\Nethgui\Controller\RequestInterface $request)
+    {
+        parent::bind($request);
+        $this->readCategories();
+        if (!$this->getRequest()->isMutation()) {
+            $categories = array();
+            $categoryValidator = $this->createValidator()->memberOf(array('alert','block','disable'));
+            $db = $this->getPlatform()->getDatabase('configuration');
+            $block = explode(',',$db->getProp('suricata','BlockCategories'));
+            $alert =  explode(',',$db->getProp('suricata','AlertCategories'));
+            foreach ($block as $bc) {
+                $this->declareParameter('Categories_'.$bc, $categoryValidator); 
+                $this->parameters['Categories_'.$bc] = 'block';
+            }
+            foreach ($alert as $ac) {
+                $this->declareParameter('Categories_'.$ac, $categoryValidator);
+                $this->parameters['Categories_'.$ac] = 'alert';
+            }
+            foreach ($this->selectableCategories as $category) {
+                if (!in_array($category,$block) && !in_array($category,$alert)) {
+                    $this->declareParameter('Categories_'.$category, $categoryValidator);
+                    $this->parameters['Categories_'.$category] = 'disable';
+                }
+            }
+        }
+    }
+
+    public function process()
+    {
+        parent::process();
+        if ($this->getRequest()->hasParameter('download')) {
+            $this->getPlatform()->signalEvent('nethserver-pulledpork-save');
+        }
+        if ($this->getRequest()->isMutation()) {
+            $block = array();
+            $alert = array();
+            $db = $this->getPlatform()->getDatabase('configuration');
+            foreach ($this->getRequest()->getParameterNames() as $param ) {
+                if (strpos($param,'Categories_') === 0) {
+                    $category = str_replace('Categories_','',$param);
+                    if (!$category) {
+                        continue;
+                    }
+                    $value = $this->getRequest()->getParameter($param);
+                    if ($value == 'alert') {
+                        $alert[] = $category;
+                    }
+                    if ($value == 'block') {
+                        $block[] = $category;
+                    }
+                }
+            }
+            $db->setProp('suricata', array('BlockCategories' => implode(',',$block)));
+            $db->setProp('suricata', array('AlertCategories' => implode(',',$alert)));
+
+            $this->getPlatform()->signalEvent('firewall-adjust');
+            $this->getPlatform()->signalEvent('nethserver-suricata-save');
+            $this->getPlatform()->signalEvent('nethserver-pulledpork-save &');
+        }
+    }
+
+
     public function initialize()
     {
-        parent::initialize();
+        $this->readCategories();
         $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'suricata', 'status'), array('configuration', 'firewall', 'nfqueue')));
-        $this->declareParameter('Policy', $this->createValidator()->memberOf($this->policies), array('configuration', 'pulledpork', 'Policy'));
+        $this->declareParameter('Categories', Validate::ANYTHING);
+        parent::initialize();
     }
+
 
     public function readStatus($status1, $status2)
     {
@@ -55,19 +133,29 @@ class IPS extends \Nethgui\Controller\AbstractController
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-pulledpork-save');
-        $this->getPlatform()->signalEvent('nethserver-suricata-save');
         $this->getPlatform()->signalEvent('firewall-adjust');
+        $this->getPlatform()->signalEvent('nethserver-suricata-save');
+        $this->getPlatform()->signalEvent('nethserver-pulledpork-save &');
     }
 
     public function prepareView(\Nethgui\View\ViewInterface $view) 
     {
         parent::prepareView($view);
-        $view['PolicyDatasource'] =  array_map(function($fmt) use ($view) {
-            return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->policies);
+        $this->readCategories();
 
+        $view['download'] = $view->getModuleUrl('/IPS?download');
+        $view['actions'] = array('disable' => $view->translate('disable_label'), 'alert' => $view->translate('alert_label'), 'block' => $view->translate('block_label'));
+        $view['categories'] = $this->selectableCategories;
     }
+
+    public function nextPath()
+    {
+        if ($this->getRequest()->hasParameter('download')) {
+            return "IPS";
+        }
+        return parent::nextPath();
+    }
+
 
 }
 

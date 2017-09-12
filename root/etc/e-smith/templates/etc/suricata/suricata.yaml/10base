@@ -61,12 +61,22 @@ vars:
 
 default-rule-path: /etc/suricata/rules
 rule-files:
-# - botcc.rules
-# - ciarmy.rules
-# - compromised.rules
-# - drop.rules
-# - dshield.rules
- - suricata.rules
+{
+    $blockCategories = $suricata{'BlockCategories'} || '';
+    $alertCategories = $suricata{'AlertCategories'} || '';
+    foreach (split(',',$blockCategories)) {
+        if ( -f "/etc/suricata/rules/$_.rules" ) {
+            $OUT .= " - $_.rules\n";
+        }
+    }
+
+    foreach (split(',',$alertCategories)) {
+        if ( -f "/etc/suricata/rules/$_.rules" ) {
+            $OUT .= " - $_.rules\n";
+        }
+    }
+
+}
 
 classification-file: /etc/suricata/classification.config
 reference-config-file: /etc/suricata/reference.config
