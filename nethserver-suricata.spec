@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -44,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_nseventsdir}/%{name}-update
 
 %changelog
+* Wed Nov 08 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.1-1
+- Suricata rules download error - Bug NethServer/dev#5370
+
 * Fri Oct 06 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.0-1
 - EveBox - NethServer/dev#5346
 
