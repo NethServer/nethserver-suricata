@@ -94,10 +94,11 @@ default-log-dir: /var/log/suricata/
 
 # global stats configuration
 stats:
-  enabled: no
+  enabled: yes
   # The interval field (in seconds) controls at what interval
   # the loggers are invoked.
-  interval: 600
+  interval: 60
+  append: no
 
 # Configure the type of alert (and other) logging you would like.
 outputs:
@@ -879,7 +880,7 @@ host-mode: auto
 # to activate the feature. You can use the filename variable to set
 # the file name of the socket.
 unix-command:
-  enabled: no
+  enabled: yes
   #filename: custom.socket
 
 # Magic file. The extension .mgc is added to the value here.
