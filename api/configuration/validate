@@ -1,0 +1,48 @@
+#!/usr/bin/php
+<?php
+/*
+ * Copyright (C) 2018 Nethesis S.r.l.
+ * http://www.nethesis.it - nethserver@nethesis.it
+ *
+ * This script is part of NethServer.
+ *
+ * NethServer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License,
+ * or any later version.
+ *
+ * NethServer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NethServer.  If not, see COPYING.
+*/
+
+require_once("/usr/libexec/nethserver/api/lib/Helpers.php");
+
+$data = readInput();
+
+$v = new LegacyValidator($data);
+$v->declareParameter('status', Validate::SERVICESTATUS);
+
+$categories = json_decode(shell_exec('/usr/libexec/nethserver/suricata-list-categories'), TRUE);
+
+foreach ($data['BlockCategories'] as $cat) {
+    if (!in_array($cat, $categories)) {
+        $v->addValidationError("BlockCategories", "invalid_category", $cat);
+    }
+}
+foreach ($data['AlertCategories'] as $cat) {
+    if (!in_array($cat, $categories)) {
+        $v->addValidationError("AlertCategories", "invalid_category", $cat);
+    }
+}
+
+# Validate the input
+if ($v->validate()) {
+    success();
+} else {
+    error($v);
+}
