@@ -34,7 +34,7 @@ var nethserver = window.nethserver;
 var console = window.console;
 
 export default {
-  name: "Configuration",
+  name: "Dashboard",
   mounted() {},
   data() {
     return {

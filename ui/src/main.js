@@ -22,6 +22,13 @@ import Vue from "vue";
 import VueI18n from "vue-i18n";
 import Router from "vue-router";
 
+import "vue-select/dist/vue-select.css";
+import vSelect from "vue-select";
+Vue.component("v-select", vSelect);
+
+import VueToggleButton from "vue-js-toggle-button";
+Vue.use(VueToggleButton);
+
 import DocInfo from "./components/DocInfo.vue";
 Vue.component("doc-info", DocInfo);
 

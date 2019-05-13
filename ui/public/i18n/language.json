@@ -5,7 +5,32 @@
   },
   "configuration": {
     "menu_title": "Configuration",
-    "title": "Configuration"
+    "title": "Configuration",
+    "categories": "Categories",
+    "available_categories": "Search available categories",
+    "configured_categories": "Configured categories",
+    "selected_categories": "Selected categories",
+    "category_not_found": "Category not found",
+    "select_category": "Select category",
+    "save_categories": "Add categories",
+    "save_category": "Add category",
+    "alert": "Alert",
+    "block": "Block",
+    "disable": "Disable",
+    "ips": "IPS",
+    "enabled": "Enabled",
+    "configuration_updated_ok": "Configuration updated successfully!",
+    "configuration_updated_error": "Configuration not updated.",
+    "no_categories_configured": "No categories configured",
+    "no_categories_configured_desc": "Search on the input above to configure new category",
+    "search": "Search",
+    "download": "Download",
+    "categories_not_found": "Categories not yet downloaded",
+    "categories_not_found_desc": "Click on the button below to download categories",
+    "categories_downloaded_ok": "Categories downloaded successfully!",
+    "categories_downloaded_error": "Categories not downloaded.",
+    "update_items": "Apply changes",
+    "no_categories_applied_desc": "You have disabled all categories, but changes are still not applied. Click on the button below to apply"
   },
   "logs": {
     "title": "Logs",
@@ -17,5 +42,9 @@
     "title": "About",
     "website": "Web site",
     "bug_tracker": "Bug tracker"
+  },
+  "docs": {
+    "more_info_about": "More info about {docsLink}.",
+    "ips": "Configuration of IPS"
   }
 }
