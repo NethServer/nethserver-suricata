@@ -1,0 +1,111 @@
+#!/usr/bin/perl
+
+#
+# Copyright (C) 2019 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+use strict;
+use warnings;
+use esmith::ConfigDB;
+use JSON;
+
+require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
+
+my $input = readInput();
+my $cmd = $input->{'action'};
+my $ret;
+
+sub get_severity
+{
+    my $n = shift;
+    my %severities = (
+        3 => 'low',
+        2 => 'medium',
+        1 => 'high'
+    );
+
+    return $severities{$n} ? $severities{$n} : 'unknown';
+}
+
+sub sorted_array
+{
+    my $hash = shift;
+    my $limit = 10;
+    my $i = 0;
+    my @ret;
+
+    # sort hash accordingly to value
+    foreach my $key (sort { $hash->{$b} <=> $hash->{$a} } keys %$hash) {
+        last if ($i >= $limit);
+        push(@ret, {"name" => $key, "hits" => $hash->{$key}});
+        $i++;
+    }
+
+    return \@ret;
+}
+
+
+if ($cmd eq 'stats') {
+    $ret = { 'uptime' => 0, rules_loaded => 0, rules_failed => 0, alerts => undef, flows => undef, counters => undef};
+    my $out = `curl --connect-timeout 2  -G http://localhost:5636/api/1/alerts -d time_range=864000s -s`;
+    my $eve = safe_decode_json($out);
+    my $total = 0;
+    my (%categories, %severities, %src, %dst);
+    if($eve->{'alerts'}) {
+        foreach (@{$eve->{'alerts'}}) {
+            $total += int($_->{'count'});
+            my $category = $_->{'event'}{'_source'}{'alert'}{'category'};
+            # catch empty category
+            $category = 'unknown'  if (!$category);
+            $categories{$category} += int($_->{'count'});
+            $severities{get_severity($_->{'event'}{'_source'}{'alert'}{'severity'})} += int($_->{'count'});
+            $src{$_->{'event'}{'_source'}{'src_ip'}} += int($_->{'count'});
+            $dst{$_->{'event'}{'_source'}{'dest_ip'}} += int($_->{'count'});
+        }
+        $ret->{'alerts'} = { 'total' => $total, 'categories' => \%categories, 'severities' => \%severities, 'sources' => sorted_array(\%src), 'destinations' => sorted_array(\%dst) };
+    }
+
+    $out = `suricatasc -c dump-counters`;
+    my $suricata = safe_decode_json($out);
+    if ($suricata->{'message'}) {
+        $ret->{'uptime'} = $suricata->{'message'}{'uptime'};
+        foreach (@{$suricata->{'message'}{'detect'}{'engines'}}) {
+            $ret->{'rules_loaded'} += $_->{'rules_loaded'} if ($_->{'rules_loaded'});
+            $ret->{'rules_failed'} += $_->{'rules_failed'} if ($_->{'rules_failed'});
+        }
+
+        $ret->{'flows'} = { 
+            tcp => $suricata->{'message'}{'flow'}{'tcp'},
+            icmp => ($suricata->{'message'}{'flow'}{'icmpv4'} + $suricata->{'message'}{'flow'}{'icmpv6'}),
+            udp => $suricata->{'message'}{'flow'}{'udp'},
+        };
+        $ret->{'counters'} = $suricata->{'message'}{'ips'};
+    }
+
+} elsif ($cmd eq 'status') {
+
+    my $db = esmith::ConfigDB->open_ro();
+    $ret->{'status'} = $db->get_prop('suricata', 'status');
+    $ret->{'AlertCategories'} = [split(",", $db->get_prop('suricata', 'AlertCategories'))];
+    $ret->{'BlockCategories'} = [split(",", $db->get_prop('suricata', 'BlockCategories'))];
+
+} else {
+    error();
+}
+print encode_json($ret);
