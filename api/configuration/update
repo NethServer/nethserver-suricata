@@ -35,9 +35,7 @@ alert=$(echo $data | jq -rc '.AlertCategories | map(tostring) | join(",")')
 
 /sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
 
-/sbin/e-smith/signal-event firewall-adjust
-/sbin/e-smith/signal-event nethserver-suricata-save
-/sbin/e-smith/signal-event -j nethserver-pulledpork-save
+/sbin/e-smith/signal-event -j nethserver-suricata-save
 
 if [ $? -gt 0 ]; then
     error "EventFailed" "See /var/log/messages"
