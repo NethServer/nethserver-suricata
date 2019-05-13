@@ -30,7 +30,10 @@
     "categories_downloaded_ok": "Categories downloaded successfully!",
     "categories_downloaded_error": "Categories not downloaded.",
     "update_items": "Apply changes",
-    "no_categories_applied_desc": "You have disabled all categories, but changes are still not applied. Click on the button below to apply"
+    "no_categories_applied_desc": "You have disabled all categories, but changes are still not applied. Click on the button below to apply",
+    "ips_is_disabled": "IPS is disabled",
+    "ips_is_disabled_desc": "Click on the button below to enable IPS",
+    "enable_ips": "Enable IPS"
   },
   "logs": {
     "title": "Logs",

@@ -33,8 +33,19 @@
 
     <div v-if="!view.isLoaded" class="spinner spinner-lg view-spinner"></div>
     <div v-show="view.isLoaded">
-      <h3>{{ $t('configuration.ips') }}</h3>
-      <div class="panel panel-default">
+      <h3 v-if="configuration.status == 'enabled'">{{ $t('configuration.ips') }}</h3>
+
+      <div v-if="configuration.status == 'disabled'" class="blank-slate-pf">
+        <h1>{{$t('configuration.ips_is_disabled')}}</h1>
+        <p>{{$t('configuration.ips_is_disabled_desc')}}.</p>
+        <div class="blank-slate-pf-main-action">
+          <button
+            @click="saveConfiguration(true)"
+            class="btn btn-primary btn-lg"
+          >{{$t('configuration.enable_ips')}}</button>
+        </div>
+      </div>
+      <div v-if="configuration.status == 'enabled'" class="panel panel-default">
         <div class="panel-heading">
           <toggle-button
             class="min-toggle right"

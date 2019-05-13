@@ -32,9 +32,8 @@
             v-model="view.path"
             v-on:change="handleLogs()"
           >
-            <option selected>/var/log/samba/log.smbd</option>
-            <option>/var/log/samba/log.winbindd</option>
-            <option>/var/log/samba/log.nmbd</option>
+            <option selected>/var/log/suricata/fast.log</option>
+            <option>/var/log/suricata/suricata.log</option>
           </select>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-8">
@@ -112,7 +111,7 @@ export default {
   data() {
     return {
       view: {
-        path: "/var/log/samba/log.smbd",
+        path: "/var/log/suricata/fast.log",
         logsLoaded: false,
         logsContent: "",
         follow: false,
