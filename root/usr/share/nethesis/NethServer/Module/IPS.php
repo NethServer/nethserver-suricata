@@ -105,9 +105,7 @@ class IPS extends \Nethgui\Controller\AbstractController
             $db->setProp('suricata', array('BlockCategories' => implode(',',$block)));
             $db->setProp('suricata', array('AlertCategories' => implode(',',$alert)));
 
-            $this->getPlatform()->signalEvent('firewall-adjust');
-            $this->getPlatform()->signalEvent('nethserver-suricata-save');
-            $this->getPlatform()->signalEvent('nethserver-pulledpork-save &');
+            $this->getPlatform()->signalEvent('nethserver-suricata-save &');
         }
     }
 
