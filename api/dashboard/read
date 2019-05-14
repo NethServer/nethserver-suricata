@@ -61,12 +61,13 @@ sub sorted_array
 }
 
 
-if ($cmd eq 'stats') {
-    $ret = { 'uptime' => 0, rules_loaded => 0, rules_failed => 0, alerts => undef, flows => undef, counters => undef};
+if ($cmd eq 'statistics') {
+    $ret = { alerts => undef, counters => { 'uptime' => 0, rules_loaded => 0, rules_failed => 0 }};
     my $out = `curl --connect-timeout 2  -G http://localhost:5636/api/1/alerts -d time_range=864000s -s`;
     my $eve = safe_decode_json($out);
     my $total = 0;
-    my (%categories, %severities, %src, %dst);
+    my (%categories, %src, %dst);
+    my %severities = (low => 0, medium => 0, high => 0);
     if($eve->{'alerts'}) {
         foreach (@{$eve->{'alerts'}}) {
             $total += int($_->{'count'});
@@ -84,18 +85,15 @@ if ($cmd eq 'stats') {
     $out = `suricatasc -c dump-counters`;
     my $suricata = safe_decode_json($out);
     if ($suricata->{'message'}) {
-        $ret->{'uptime'} = $suricata->{'message'}{'uptime'};
+        $ret->{'counters'}{'uptime'} = $suricata->{'message'}{'uptime'};
         foreach (@{$suricata->{'message'}{'detect'}{'engines'}}) {
-            $ret->{'rules_loaded'} += $_->{'rules_loaded'} if ($_->{'rules_loaded'});
-            $ret->{'rules_failed'} += $_->{'rules_failed'} if ($_->{'rules_failed'});
+            $ret->{'counters'}{'rules_loaded'} += $_->{'rules_loaded'} if ($_->{'rules_loaded'});
+            $ret->{'counters'}{'rules_failed'} += $_->{'rules_failed'} if ($_->{'rules_failed'});
         }
 
-        $ret->{'flows'} = { 
-            tcp => $suricata->{'message'}{'flow'}{'tcp'},
-            icmp => ($suricata->{'message'}{'flow'}{'icmpv4'} + $suricata->{'message'}{'flow'}{'icmpv6'}),
-            udp => $suricata->{'message'}{'flow'}{'udp'},
-        };
-        $ret->{'counters'} = $suricata->{'message'}{'ips'};
+        foreach (keys %{$suricata->{'message'}{'ips'}}) {
+            $ret->{'counters'}{$_} = $suricata->{'message'}{'ips'}{$_};
+        }
     }
 
 } elsif ($cmd eq 'status') {
