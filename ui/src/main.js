@@ -76,6 +76,10 @@ const router = new Router({
       path: "/about",
       name: "about",
       component: About
+    },
+    {
+      path: "*",
+      redirect: "/"
     }
   ]
 });
