@@ -28,17 +28,11 @@
     <div v-show="view.isLoaded">
       <h2>
         {{$t('dashboard.evebox')}}
-        <span class="gray min-size right">{{$t('dashboard.last_updated_24h')}}</span>
+        <span
+          class="gray min-size right"
+        >{{$t('dashboard.last_updated_24h')}}</span>
       </h2>
       <div class="row">
-        <div class="col-sm-6">
-          <h3 class="no-mg-top">{{$t('dashboard.severities')}}</h3>
-          <div v-show="Object.keys(alerts.severities).length == 0" class="empty-piechart">
-            <span class="fa fa-pie-chart"></span>
-            <div>{{ $t('dashboard.empty_piechart_label') }}</div>
-          </div>
-          <div v-show="Object.keys(alerts.severities).length > 0" id="stats-severities-pie-chart"></div>
-        </div>
         <div class="col-sm-6">
           <h3 class="no-mg-top">{{$t('dashboard.categories')}}</h3>
           <div v-show="Object.keys(alerts.categories).length == 0" class="empty-piechart">
@@ -46,6 +40,14 @@
             <div>{{ $t('dashboard.empty_piechart_label') }}</div>
           </div>
           <div v-show="Object.keys(alerts.categories).length > 0" id="stats-categories-pie-chart"></div>
+        </div>
+        <div class="col-sm-6">
+          <h3 class="no-mg-top">{{$t('dashboard.severities')}}</h3>
+          <div v-show="Object.keys(alerts.severities).length == 0" class="empty-piechart">
+            <span class="fa fa-pie-chart"></span>
+            <div>{{ $t('dashboard.empty_piechart_label') }}</div>
+          </div>
+          <div v-show="Object.keys(alerts.severities).length > 0" id="stats-severities-pie-chart"></div>
         </div>
       </div>
 
@@ -215,7 +217,7 @@ export default {
             }
           },
           {
-            width: window.innerWidth / 2,
+            width: window.innerWidth * 0.5,
             height: 175
           },
           {
@@ -243,7 +245,7 @@ export default {
             columns: columns
           },
           {
-            width: window.innerWidth / 2,
+            width: window.innerWidth * 0.5,
             height: 175
           },
           {
