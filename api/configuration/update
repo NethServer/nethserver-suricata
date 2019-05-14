@@ -35,8 +35,8 @@ action="$(_get action)"
 
 case $action in
     "configuration")
-        block=$(echo $data | jq -rc '.BlockCategories | map(tostring) | join(",")')
-        alert=$(echo $data | jq -rc '.AlertCategories | map(tostring) | join(",")')
+        block=$(echo $data | jq -rc '[.categories[] | select(.status == "block") | .name] | map(tostring) | join(",")')
+        alert=$(echo $data | jq -rc '[.categories[] | select(.status == "alert") | .name] | map(tostring) | join(",")')
 
         /sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
         /sbin/e-smith/signal-event -j nethserver-suricata-save

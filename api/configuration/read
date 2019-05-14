@@ -27,41 +27,40 @@ use esmith::ConfigDB;
 
 require '/usr/libexec/nethserver/api/lib/helper_functions.pl';
 
-my $input = readInput();
-my $cmd = $input->{'action'};
-
 sub format_category
 {
     my $name = shift;
+    my $source = shift;
+    my $alert = shift;
+    my $block = shift;
+    my $status = 'disable';
     my $description = $name;
     $description =~ s/ET(-emerging)*(-)*//;
     $description =~ s/_/ /g;
 
-    return { "name" => $name, "Description" => ucfirst($description) };
+    foreach (@{$block}) {
+        $status = 'block' if ($_ eq $name);
+    }
+
+    foreach (@{$alert}) {
+        $status = 'alert' if ($_ eq $name);
+    }
+
+    return { "name" => $name, "Description" => ucfirst($description), "status" => $status, "Source" => $source };
 }
 
 my $ret;
+my @categories;
 
-if ($cmd eq 'categories') {
-    my @categories;
-    my $out = `/usr/libexec/nethserver/suricata-list-categories`;
-    foreach (@{safe_decode_json($out)}) {
-        # skip non-ET categories
-        next if ($_ !~ /^ET/);
-        push(@categories, format_category($_));
-    }
-    $ret->{'categories'} = \@categories;
-} elsif ($cmd eq 'configuration') {
-    my (@alert, @block);
-    my $db = esmith::ConfigDB->open_ro();
-    $ret->{'status'} = $db->get_prop('suricata', 'status');
-    foreach (split(",", $db->get_prop('suricata', 'AlertCategories'))) {
-        push(@alert, format_category($_));
-    }
-    foreach (split(",", $db->get_prop('suricata', 'BlockCategories'))) {
-        push(@block, format_category($_));
-    }
-    $ret->{'AlertCategories'} = \@alert;
-    $ret->{'BlockCategories'} = \@block;
+my $db = esmith::ConfigDB->open_ro();
+my @alert= split(",", $db->get_prop('suricata', 'AlertCategories'));
+my @block = split(",", $db->get_prop('suricata', 'BlockCategories'));
+my $out = `/usr/libexec/nethserver/suricata-list-categories`;
+foreach (@{safe_decode_json($out)}) {
+    # skip non-ET categories
+    next if ($_ !~ /^ET/);
+    push(@categories, format_category($_, 'Emerging Threats', \@alert, \@block));
 }
+$ret->{'categories'} = \@categories;
+$ret->{'status'} = $db->get_prop('suricata', 'status');
 print encode_json($ret);

@@ -29,14 +29,9 @@ $v->declareParameter('status', Validate::SERVICESTATUS);
 
 $categories = json_decode(shell_exec('/usr/libexec/nethserver/suricata-list-categories'), TRUE);
 
-foreach ($data['BlockCategories'] as $cat) {
-    if (!in_array($cat, $categories)) {
-        $v->addValidationError("BlockCategories", "invalid_category", $cat);
-    }
-}
-foreach ($data['AlertCategories'] as $cat) {
-    if (!in_array($cat, $categories)) {
-        $v->addValidationError("AlertCategories", "invalid_category", $cat);
+foreach ($data['categories'] as $cat) {
+    if (!in_array($cat['name'], $categories)) {
+        $v->addValidationError("categories", "invalid_category", $cat);
     }
 }
 
