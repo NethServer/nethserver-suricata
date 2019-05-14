@@ -20,7 +20,7 @@
 
 import c3 from 'c3'
 
-export default function generatePieChart(bindto, data, size, tooltip) {
+export default function generatePieChart(bindto, data, size, tooltip, color) {
     var $ = window.jQuery
     var c3ChartDefaults = $().c3ChartDefaults()
     var pieChartRightConfig = c3ChartDefaults.getDefaultPieConfig()
@@ -34,5 +34,6 @@ export default function generatePieChart(bindto, data, size, tooltip) {
     };
     pieChartRightConfig.size = size;
     pieChartRightConfig.tooltip = tooltip || {};
+    pieChartRightConfig.color = color;
     return c3.generate(pieChartRightConfig)
 }

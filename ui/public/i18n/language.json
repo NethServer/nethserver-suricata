@@ -20,7 +20,9 @@
     "replaced": "Replaced",
     "rejected": "Rejected",
     "rules_loaded": "Rules loaded",
-    "rules_failed": "Rules failed"
+    "rules_failed": "Rules failed",
+    "evebox": "Evebox",
+    "suricata": "Suricata"
   },
   "configuration": {
     "menu_title": "Configuration",

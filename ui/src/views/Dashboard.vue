@@ -27,8 +27,8 @@
     <div v-if="!view.isLoaded" class="spinner spinner-lg view-spinner"></div>
     <div v-show="view.isLoaded">
       <h2>
-        Evebox
-        <span class="gray min-size">({{$t('dashboard.last_updated_24h')}})</span>
+        {{$t('dashboard.evebox')}}
+        <span class="gray min-size right">{{$t('dashboard.last_updated_24h')}}</span>
       </h2>
       <div class="row">
         <div class="col-sm-6">
@@ -84,12 +84,11 @@
 
       <div class="divider"></div>
       <h2>
-        Suricata
-        <span class="gray min-size">
-          (
+        {{$t('dashboard.suricata')}}
+        <span class="gray min-size right">
           <i18n path="dashboard.last_updated">
-            <span class="adjust-space" place="time">{{counters.uptime | secondsInHour}}</span>
-          </i18n>)
+            <span place="time">{{counters.uptime | secondsInHour}}</span>
+          </i18n>
         </span>
       </h2>
       <div class="row">
@@ -295,10 +294,6 @@ export default {
 }
 .min-size {
   font-size: 14px;
-}
-
-.adjust-space {
-  margin-left: -3px;
 }
 
 .empty-piechart {
