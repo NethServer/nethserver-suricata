@@ -42,6 +42,12 @@ import "./filters";
 
 Vue.config.productionTip = false;
 
+Vue.directive("focus", {
+  inserted: function(el) {
+    el.focus();
+  }
+});
+
 Vue.use(VueI18n);
 const i18n = new VueI18n();
 

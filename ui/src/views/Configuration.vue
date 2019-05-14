@@ -31,6 +31,25 @@
       :inline="false"
     ></doc-info>
 
+    <div
+      v-if="changesNeeded > 0"
+      :class="['alert', 'alert-warning', 'alert-dismissable mg-top-10']"
+    >
+      <button
+        @click="saveConfiguration()"
+        class="btn btn-primary pull-right mg-left-5"
+      >{{$t('configuration.apply_changes')}}</button>
+      <button
+        @click="getConfiguration()"
+        class="btn btn-default pull-right"
+      >{{$t('configuration.reset')}}</button>
+
+      <span :class="['pficon', 'pficon-warning-triangle-o']"></span>
+
+      <strong>{{$t('warning')}}.</strong>
+      <span class="mg-left-5">{{$t('configuration.configuration_categories_change')}}</span>.
+    </div>
+
     <div v-if="!view.isLoaded" class="spinner spinner-lg view-spinner"></div>
     <div v-show="view.isLoaded">
       <h3 v-if="configuration.status == 'enabled'">{{ $t('configuration.ips') }}</h3>
@@ -65,161 +84,91 @@
         </div>
       </div>
 
-      <h3 v-if="allCategories.length > 0">{{$t('configuration.available_categories')}}</h3>
-      <v-select
-        v-if="allCategories.length > 0"
-        @input="addCategory"
-        v-model="categoryToAdd"
-        :options="allCategories"
-        label="Description"
-        :clearable="false"
-        :placeholder="$t('configuration.select_category')"
-        :components="{OpenIndicator}"
-        id="cat-search"
-      >
-        <template slot="option" slot-scope="option">{{ option.Description }}</template>
-        <div slot="no-options">{{$t('configuration.category_not_found')}}</div>
-      </v-select>
-      <h4 v-show="newCategories.length > 0">{{$t('configuration.selected_categories')}}</h4>
-      <div class="row adjust-mg-bottom" v-for="(c, ck) in newCategories" :key="ck">
-        <span class="col-sm-4">{{c.Description}}</span>
-        <span class="col-sm-2">
-          <select class="form-control" v-model="c.type">
-            <option value="alert">{{$t('configuration.alert')}}</option>
-            <option value="block">{{$t('configuration.block')}}</option>
-          </select>
-        </span>
-        <span class="col-sm-2">
-          <span class="fa fa-times remove-cat" @click="removeCategory(ck)"></span>
-        </span>
-      </div>
-      <button
-        v-if="newCategories.length > 0"
-        class="btn btn-primary"
-        @click="addCategoriesToConfig()"
-      >{{newCategories.length == 1 ? $t('configuration.save_category') : $t('configuration.save_categories')}}</button>
-      <div v-if="newCategories.length > 0" class="divider adjust-divider"></div>
-
       <h3
-        v-if="configuration.BlockCategories.length > 0 || configuration.AlertCategories.length > 0"
+        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+      >{{$t('configuration.category_list')}}</h3>
+      <form
+        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+        role="form"
+        class="search-pf has-button search"
       >
-        {{$t('configuration.configured_categories')}}
-        <button
-          v-if="changesNeeded > 0"
-          @click="saveConfiguration()"
-          class="btn btn-primary right"
-        >{{$t('configuration.update_items')}}</button>
-      </h3>
+        <div class="form-group has-clear">
+          <div class="search-pf-input-group">
+            <label class="sr-only">Search</label>
+            <input
+              v-focus
+              type="search"
+              v-model="searchString"
+              class="form-control input-lg"
+              :placeholder="$t('search')+'...'"
+              id="pf-search-list"
+            >
+          </div>
+        </div>
+      </form>
+
       <div
-        v-if="changesNeeded == 0 && configuration.BlockCategories.length == 0 && configuration.AlertCategories.length == 0"
+        v-if="configuration.status == 'enabled' && configuration.categories.length == 0"
         class="blank-slate-pf"
       >
         <div class="blank-slate-pf-icon">
           <span class="fa fa-ban"></span>
         </div>
-        <h1>{{allCategories.length > 0 ? $t('configuration.no_categories_configured') : $t('configuration.categories_not_found')}}</h1>
-        <p>{{allCategories.length > 0 ? $t('configuration.no_categories_configured_desc') : $t('configuration.categories_not_found_desc') }}.</p>
+        <h1>{{$t('configuration.categories_not_found')}}</h1>
+        <p>{{$t('configuration.categories_not_found_desc')}}.</p>
         <div class="blank-slate-pf-main-action">
           <button
-            @click="allCategories.length > 0 ? focusSearch() : downloadCategories()"
+            @click="downloadCategories()"
             class="btn btn-primary btn-lg"
-          >{{allCategories.length > 0 ? $t('configuration.search') : $t('configuration.download')}}</button>
-        </div>
-      </div>
-      <div
-        v-if="changesNeeded > 0 && configuration.BlockCategories.length == 0 && configuration.AlertCategories.length == 0"
-        class="blank-slate-pf"
-      >
-        <div class="blank-slate-pf-icon">
-          <span class="fa fa-ban"></span>
-        </div>
-        <h1>{{$t('configuration.no_categories_configured')}}</h1>
-        <p>{{$t('configuration.no_categories_applied_desc')}}.</p>
-        <div class="blank-slate-pf-main-action">
-          <button
-            @click="saveConfiguration()"
-            class="btn btn-primary btn-lg"
-          >{{$t('configuration.update_items')}}</button>
+          >{{$t('configuration.download')}}</button>
         </div>
       </div>
 
-      <h4 v-if="configuration.BlockCategories.length > 0">{{$t('configuration.block')}}</h4>
       <div
-        v-if="configuration.BlockCategories.length > 0"
+        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
         class="list-group list-view-pf list-view-pf-view no-mg-top mg-top-10"
       >
         <div
-          v-for="(m, mk) in configuration.BlockCategories"
+          v-for="(m, mk) in filteredCategories"
           v-bind:key="mk"
-          class="list-group-item"
+          :class="['list-group-item', m.status == 'disable' ? 'gray' : '']"
         >
           <div class="list-view-pf-actions">
             <button
-              @click="removeCategoryConfig(configuration.BlockCategories, mk)"
+              v-if="m.status != 'disable'"
+              @click="m.status = 'disable'; changesNeeded++"
               class="btn btn-danger"
             >{{$t('configuration.disable')}}</button>
+            <button
+              v-if="m.status == 'disable'"
+              @click="m.status = 'alert'; changesNeeded++"
+              class="btn btn-primary"
+            >{{$t('configuration.enable')}}</button>
           </div>
 
           <div class="list-view-pf-main-info small-list">
             <div class="list-view-pf-left">
-              <span :class="['fa', 'list-view-pf-icon-sm', 'fa-ban']"></span>
+              <span
+                :class="['fa', 'list-view-pf-icon-sm', m.status == 'block' ? 'pficon pficon-security' : m.status == 'alert' ? 'fa fa-exclamation-triangle' : 'fa fa-ban']"
+              ></span>
             </div>
             <div class="list-view-pf-body">
               <div class="list-view-pf-description">
-                <div class="list-group-item-heading">{{m.name}}</div>
-                <div class="list-group-item-text">{{m.Description}}</div>
-              </div>
-              <div class="list-view-pf-additional-info rules-info">
-                <div class="list-view-pf-additional-info-item">
-                  <span class="pficon pficon-security"></span>
-                  <select
-                    @change="updateCategoryConfig(configuration.BlockCategories, mk, m.type)"
-                    class="form-control"
-                    v-model="m.type"
-                  >
-                    <option value="alert">{{$t('configuration.alert')}}</option>
-                    <option value="block">{{$t('configuration.block')}}</option>
-                  </select>
+                <div class="list-group-item-heading">
+                  {{m.Description}}
+                  <span class="gray">({{m.name}}</span>)
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h4 v-if="configuration.AlertCategories.length > 0">{{$t('configuration.alert')}}</h4>
-      <div
-        v-if="configuration.AlertCategories.length > 0"
-        class="list-group list-view-pf list-view-pf-view no-mg-top mg-top-10"
-      >
-        <div
-          v-for="(m, mk) in configuration.AlertCategories"
-          v-bind:key="mk"
-          class="list-group-item"
-        >
-          <div class="list-view-pf-actions">
-            <button
-              @click="removeCategoryConfig(configuration.AlertCategories, mk)"
-              class="btn btn-danger"
-            >{{$t('configuration.disable')}}</button>
-          </div>
-
-          <div class="list-view-pf-main-info small-list">
-            <div class="list-view-pf-left">
-              <span :class="['fa', 'list-view-pf-icon-sm', 'fa-ban']"></span>
-            </div>
-            <div class="list-view-pf-body">
-              <div class="list-view-pf-description">
-                <div class="list-group-item-heading">{{m.name}}</div>
-                <div class="list-group-item-text">{{m.Description}}</div>
-              </div>
               <div class="list-view-pf-additional-info rules-info">
                 <div class="list-view-pf-additional-info-item">
-                  <span class="fa fa-exclamation-triangle"></span>
+                  <span
+                    :class="[m.status == 'block' ? 'pficon pficon-security' : m.status == 'alert' ? 'fa fa-exclamation-triangle' : 'fa fa-ban']"
+                  ></span>
                   <select
-                    @change="updateCategoryConfig(configuration.AlertCategories, mk, m.type)"
+                    @change="updateStatus(mk, m.status)"
                     class="form-control"
-                    v-model="m.type"
+                    v-model="m.status"
+                    :disabled="m.status == 'disable'"
                   >
                     <option value="alert">{{$t('configuration.alert')}}</option>
                     <option value="block">{{$t('configuration.block')}}</option>
@@ -266,7 +215,6 @@ export default {
   name: "Configuration",
   mounted() {
     this.getConfiguration();
-    this.getCategories();
   },
   beforeRouteLeave(to, from, next) {
     if (this.changesNeeded > 0) {
@@ -281,30 +229,31 @@ export default {
       view: {
         isLoaded: false
       },
-      allCategories: [],
+      searchString: "",
       configuration: {
-        BlockCategories: [],
-        AlertCategories: [],
+        categories: [],
         status: ""
       },
-      newCategories: [],
-      categoryToAdd: {},
-      changesNeeded: 0,
-      OpenIndicator: {
-        render: createElement =>
-          createElement("span", { class: { toggle: true } })
-      }
+      changesNeeded: 0
     };
+  },
+  computed: {
+    filteredCategories() {
+      var returnObj = [];
+      for (var r in this.configuration.categories) {
+        var cat = JSON.stringify(this.configuration.categories[r]);
+        if (cat.toLowerCase().includes(this.searchString.toLowerCase())) {
+          returnObj.push(this.configuration.categories[r]);
+        }
+      }
+
+      return returnObj;
+    }
   },
   methods: {
     proceed() {
       $(".modal").modal("hide");
       this.proceedFunc();
-    },
-    focusSearch() {
-      $("#cat-search")
-        .find("input")
-        .focus();
     },
     getConfiguration() {
       var context = this;
@@ -324,39 +273,7 @@ export default {
           }
           context.configuration = success;
 
-          for (var c in context.configuration.BlockCategories) {
-            var cat = context.configuration.BlockCategories[c];
-            cat.type = "block";
-          }
-          for (var c in context.configuration.AlertCategories) {
-            var cat = context.configuration.AlertCategories[c];
-            cat.type = "alert";
-          }
-
-          context.view.isLoaded = true;
-        },
-        function(error) {
-          console.error(error);
-        }
-      );
-    },
-    getCategories() {
-      var context = this;
-
-      context.view.isLoaded = false;
-      nethserver.exec(
-        ["nethserver-suricata/configuration/read"],
-        {
-          action: "categories"
-        },
-        null,
-        function(success) {
-          try {
-            success = JSON.parse(success);
-          } catch (e) {
-            console.error(e);
-          }
-          context.allCategories = success.categories;
+          context.changesNeeded = 0;
           context.view.isLoaded = true;
         },
         function(error) {
@@ -387,66 +304,15 @@ export default {
         function(success) {
           // get all
           context.getConfiguration();
-          context.getCategories();
         },
         function(error, data) {
           console.error(error, data);
         }
       );
     },
-    addCategory(category) {
-      if (category && category.name.length > 0) {
-        if (!this.categoryAlreadyAdded(category)) {
-          category.type = "alert";
-          this.newCategories.push(category);
-        }
-      }
-    },
-    categoryAlreadyAdded(category) {
-      return this.newCategories.indexOf(category) > -1;
-    },
-    removeCategory(index) {
-      this.newCategories.splice(index, 1);
-    },
-    removeCategoryConfig(data, index) {
-      data.splice(index, 1);
-
+    updateStatus(index, newState) {
+      this.configuration.categories[index].status = newState;
       this.changesNeeded++;
-    },
-    updateCategoryConfig(data, index, newState) {
-      var old = data[index];
-
-      switch (newState) {
-        case "alert":
-          this.configuration.AlertCategories.push(old);
-          this.configuration.BlockCategories.splice(index, 1);
-          break;
-
-        case "block":
-          this.configuration.BlockCategories.push(old);
-          this.configuration.AlertCategories.splice(index, 1);
-          break;
-      }
-
-      this.changesNeeded++;
-    },
-    addCategoriesToConfig() {
-      for (var c in this.newCategories) {
-        var cat = this.newCategories[c];
-
-        switch (cat.type) {
-          case "alert":
-            this.configuration.AlertCategories.push(cat);
-            break;
-
-          case "block":
-            this.configuration.BlockCategories.push(cat);
-            break;
-        }
-      }
-      this.categoryToAdd = {};
-      this.newCategories = [];
-      this.saveConfiguration();
     },
     saveConfiguration(toggle) {
       var context = this;
@@ -470,16 +336,7 @@ export default {
         {
           action: "configuration",
           status: context.configuration.status,
-          BlockCategories: context.configuration.BlockCategories.map(function(
-            c
-          ) {
-            return c.name;
-          }),
-          AlertCategories: context.configuration.AlertCategories.map(function(
-            c
-          ) {
-            return c.name;
-          })
+          categories: context.configuration.categories
         },
         function(stream) {
           console.info("configuration", stream);
@@ -488,7 +345,6 @@ export default {
           // get all
           context.changesNeeded = 0;
           context.getConfiguration();
-          context.getCategories();
         },
         function(error, data) {
           console.error(error, data);
