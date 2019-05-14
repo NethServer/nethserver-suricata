@@ -22,20 +22,34 @@
 
 . /usr/libexec/nethserver/api/lib/helper_functions
 
-data=$(cat /dev/stdin)
-
 function _get
 {
     field=$1
     echo $data | jq -r ".$field"
 }
 
-block=$(echo $data | jq -rc '.BlockCategories | map(tostring) | join(",")')
-alert=$(echo $data | jq -rc '.AlertCategories | map(tostring) | join(",")')
 
-/sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
+data=$(cat /dev/stdin)
+action="$(_get action)"
 
-/sbin/e-smith/signal-event -j nethserver-suricata-save
+
+case $action in
+    "configuration")
+        block=$(echo $data | jq -rc '.BlockCategories | map(tostring) | join(",")')
+        alert=$(echo $data | jq -rc '.AlertCategories | map(tostring) | join(",")')
+
+        /sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
+        /sbin/e-smith/signal-event -j nethserver-suricata-save
+        ;;
+
+    "download")
+        /sbin/e-smith/signal-event -j nethserver-pulledpork-save
+        ;;
+
+    *)
+        error;;
+esac
+
 
 if [ $? -gt 0 ]; then
     error "EventFailed" "See /var/log/messages"
