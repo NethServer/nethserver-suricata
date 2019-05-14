@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "c3": "^0.7.0",
     "moment": "^2.24.0",
     "vue": "^2.6.10",
     "vue-i18n": "^8.11.2",

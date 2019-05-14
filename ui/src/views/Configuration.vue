@@ -231,6 +231,30 @@
         </div>
       </div>
     </div>
+
+    <div class="modal" id="routeChangeModal" tabindex="-1" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{$t('configuration.not_applied_changes_title')}}</h4>
+          </div>
+          <form class="form-horizontal" v-on:submit.prevent="proceed()">
+            <div class="modal-body">
+              <div class="form-group">
+                <label
+                  class="col-sm-10 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('configuration.not_applied_changes')}}?</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" type="button" data-dismiss="modal">{{$t('cancel')}}</button>
+              <button class="btn btn-primary" type="submit">{{$t('leave')}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -243,6 +267,14 @@ export default {
   mounted() {
     this.getConfiguration();
     this.getCategories();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.changesNeeded > 0) {
+      $("#routeChangeModal").modal("show");
+      this.proceedFunc = next;
+    } else {
+      next();
+    }
   },
   data() {
     return {
@@ -265,6 +297,10 @@ export default {
     };
   },
   methods: {
+    proceed() {
+      $(".modal").modal("hide");
+      this.proceedFunc();
+    },
     focusSearch() {
       $("#cat-search")
         .find("input")
@@ -474,7 +510,7 @@ export default {
   flex: 1 0 70% !important;
 }
 .list-view-pf-actions {
-  z-index: 9;
+  z-index: 2;
 }
 .remove-cat {
   margin-top: 6px;
