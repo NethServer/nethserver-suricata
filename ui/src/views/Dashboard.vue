@@ -84,6 +84,16 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-sm-6">
+          <a
+            :href="eveboxUrl"
+            class="btn btn-primary mg-bottom-10"
+            target="_blank"
+          >{{$t('dashboard.open_evebox')}}</a>
+        </div>
+      </div>
+
       <div class="divider"></div>
       <h2>
         {{$t('dashboard.suricata')}}
@@ -188,7 +198,8 @@ export default {
         sources: [],
         destinations: []
       },
-      counters: {}
+      counters: {},
+      eveboxUrl: ""
     };
   },
   methods: {
@@ -265,7 +276,8 @@ export default {
       nethserver.exec(
         ["nethserver-suricata/dashboard/read"],
         {
-          action: "statistics"
+          action: "statistics",
+          hostname: window.location.hostname
         },
         null,
         function(success) {
@@ -276,6 +288,7 @@ export default {
           }
           context.alerts = success.alerts;
           context.counters = success.counters;
+          context.eveboxUrl = success.url;
 
           context.initCharts();
 
@@ -307,5 +320,9 @@ export default {
 .empty-piechart .fa {
   font-size: 92px;
   color: #bbbbbb;
+}
+
+.mg-bottom-10 {
+  margin-bottom: 10px;
 }
 </style>

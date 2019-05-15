@@ -84,6 +84,38 @@
         </div>
       </div>
 
+      <h3>{{$t('configuration.actions')}}</h3>
+      <div class="btn-group">
+        <button
+          @click="resetDefault()"
+          class="btn btn-primary btn-lg shutdown-privileged"
+          data-action="restart"
+          data-container="body"
+        >{{$t('configuration.reset_default')}}</button>
+        <button
+          data-toggle="dropdown"
+          class="btn btn-primary btn-lg dropdown-toggle shutdown-privileged"
+        >
+          <span class="caret"></span>
+        </button>
+        <ul role="menu" class="dropdown-menu">
+          <li class="presentation">
+            <a
+              @click="enableAll()"
+              role="menuitem"
+              data-action="shutdown"
+            >{{$t('configuration.enable_all')}}</a>
+          </li>
+          <li class="presentation">
+            <a
+              @click="disableAll()"
+              role="menuitem"
+              data-action="restart"
+            >{{$t('configuration.disable_all')}}</a>
+          </li>
+        </ul>
+      </div>
+
       <h3
         v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
       >{{$t('configuration.category_list')}}</h3>
@@ -215,6 +247,7 @@ export default {
   name: "Configuration",
   mounted() {
     this.getConfiguration();
+    this.getDefaultCategories();
   },
   beforeRouteLeave(to, from, next) {
     if (this.changesNeeded > 0) {
@@ -234,6 +267,7 @@ export default {
         categories: [],
         status: ""
       },
+      defaultCategories: [],
       changesNeeded: 0
     };
   },
@@ -254,6 +288,44 @@ export default {
     proceed() {
       $(".modal").modal("hide");
       this.proceedFunc();
+    },
+    resetDefault() {
+      this.configuration.categories = this.defaultCategories;
+      this.changesNeeded++;
+    },
+    enableAll() {
+      for (var c in this.configuration.categories) {
+        this.configuration.categories[c].status = "alert";
+      }
+      this.changesNeeded++;
+    },
+    disableAll() {
+      for (var c in this.configuration.categories) {
+        this.configuration.categories[c].status = "disable";
+      }
+      this.changesNeeded++;
+    },
+    getDefaultCategories() {
+      var context = this;
+
+      nethserver.exec(
+        ["nethserver-suricata/configuration/read"],
+        {
+          action: "default-categories"
+        },
+        null,
+        function(success) {
+          try {
+            success = JSON.parse(success);
+          } catch (e) {
+            console.error(e);
+          }
+          context.defaultCategories = success.categories;
+        },
+        function(error) {
+          console.error(error);
+        }
+      );
     },
     getConfiguration() {
       var context = this;

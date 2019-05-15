@@ -24,7 +24,8 @@
     "rules_loaded": "Rules loaded",
     "rules_failed": "Rules failed",
     "evebox": "Evebox alerts",
-    "suricata": "Suricata statistics"
+    "suricata": "Suricata statistics",
+    "open_evebox": "Open EveBox"
   },
   "configuration": {
     "menu_title": "Configuration",
@@ -54,7 +55,11 @@
     "not_applied_changes": "You have changes not applied. Are you sure that you want to leave this page",
     "apply_changes": "Apply changes",
     "reset": "Reset",
-    "configuration_categories_change": "There are categories changes not yet applied. Click on 'Apply changes' to update"
+    "configuration_categories_change": "There are categories changes not yet applied. Click on 'Apply changes' to update",
+    "actions": "Actions",
+    "reset_default": "Get defaults categories",
+    "enable_all": "Enable all categories",
+    "disable_all": "Disable all categories"
   },
   "logs": {
     "title": "Logs",
