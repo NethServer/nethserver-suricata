@@ -61,6 +61,7 @@ sub sorted_array
 }
 
 
+my $db = esmith::ConfigDB->open_ro();
 if ($cmd eq 'statistics') {
     $ret = { alerts => undef, counters => { 'uptime' => 0, rules_loaded => 0, rules_failed => 0 }};
     my $out = `curl --connect-timeout 2  -G http://localhost:5636/api/1/alerts -d time_range=864000s -s`;
@@ -96,9 +97,12 @@ if ($cmd eq 'statistics') {
         }
     }
 
+    # calculate Evebox URL
+    my $hostname = $input->{'hostname'};
+    $ret->{'url'} = "https://$hostname:980/".$db->get_prop('evebox','alias');
+
 } elsif ($cmd eq 'status') {
 
-    my $db = esmith::ConfigDB->open_ro();
     $ret->{'status'} = $db->get_prop('suricata', 'status');
     $ret->{'AlertCategories'} = [split(",", $db->get_prop('suricata', 'AlertCategories'))];
     $ret->{'BlockCategories'} = [split(",", $db->get_prop('suricata', 'BlockCategories'))];
