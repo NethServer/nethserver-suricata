@@ -49,12 +49,20 @@ sub format_category
     return { "name" => $name, "Description" => ucfirst($description), "status" => $status, "Source" => $source };
 }
 
-my $ret;
-my @categories;
+my $input = readInput();
+my $cmd = $input->{'action'};
 
+my $ret;
 my $db = esmith::ConfigDB->open_ro();
-my @alert= split(",", $db->get_prop('suricata', 'AlertCategories'));
-my @block = split(",", $db->get_prop('suricata', 'BlockCategories'));
+my (@categories, @alert, @block);
+if ($cmd eq 'configuration') {
+    @alert = split(",", $db->get_prop('suricata', 'AlertCategories'));
+    @block = split(",", $db->get_prop('suricata', 'BlockCategories'));
+    $ret->{'status'} = $db->get_prop('suricata', 'status');
+} elsif ($cmd eq 'default-categories') {
+    @alert = qw(ET-emerging-current_events ET-emerging-dos ET-emerging-ftp ET-emerging-games ET-emerging-inappropriate ET-emerging-info ET-emerging-misc ET-emerging-mobile_malware ET-emerging-p2p ET-emerging-scan ET-emerging-shellcode ET-emerging-sql ET-emerging-trojan ET-emerging-voip ET-emerging-web_client ET-emerging-worm);
+    @block = qw(ET-botcc.portgrouped ET-botcc ET-ciarmy ET-compromised ET-drop ET-dshield ET-emerging-activex ET-emerging-attack_response ET-emerging-exploit ET-emerging-malware ET-emerging-netbios);
+}
 my $out = `/usr/libexec/nethserver/suricata-list-categories`;
 foreach (@{safe_decode_json($out)}) {
     # skip non-ET categories
@@ -62,5 +70,5 @@ foreach (@{safe_decode_json($out)}) {
     push(@categories, format_category($_, 'Emerging Threats', \@alert, \@block));
 }
 $ret->{'categories'} = \@categories;
-$ret->{'status'} = $db->get_prop('suricata', 'status');
+
 print encode_json($ret);
