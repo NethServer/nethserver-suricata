@@ -84,8 +84,13 @@
         </div>
       </div>
 
-      <h3 v-if="configuration.status == 'enabled' && configuration.categories.length > 0">{{$t('configuration.actions')}}</h3>
-      <div v-if="configuration.status == 'enabled' && configuration.categories.length > 0" class="btn-group">
+      <h3
+        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+      >{{$t('configuration.actions')}}</h3>
+      <div
+        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+        class="btn-group"
+      >
         <button
           @click="resetDefault()"
           class="btn btn-primary btn-lg shutdown-privileged"
@@ -290,7 +295,9 @@ export default {
       this.proceedFunc();
     },
     resetDefault() {
-      this.configuration.categories = this.defaultCategories;
+      this.configuration.categories = JSON.parse(
+        JSON.stringify(this.defaultCategories)
+      );
       this.changesNeeded++;
     },
     enableAll() {
