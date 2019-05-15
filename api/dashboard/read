@@ -85,7 +85,7 @@ if ($cmd eq 'statistics') {
 
     $out = `suricatasc -c dump-counters`;
     my $suricata = safe_decode_json($out);
-    if ($suricata->{'message'}) {
+    if ($suricata->{'message'} && $suricata->{'message'} ne 'stats not yet synchronized') {
         $ret->{'counters'}{'uptime'} = $suricata->{'message'}{'uptime'};
         foreach (@{$suricata->{'message'}{'detect'}{'engines'}}) {
             $ret->{'counters'}{'rules_loaded'} += $_->{'rules_loaded'} if ($_->{'rules_loaded'});
