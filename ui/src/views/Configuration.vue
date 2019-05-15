@@ -84,8 +84,8 @@
         </div>
       </div>
 
-      <h3>{{$t('configuration.actions')}}</h3>
-      <div class="btn-group">
+      <h3 v-if="configuration.status == 'enabled' && configuration.categories.length > 0">{{$t('configuration.actions')}}</h3>
+      <div v-if="configuration.status == 'enabled' && configuration.categories.length > 0" class="btn-group">
         <button
           @click="resetDefault()"
           class="btn btn-primary btn-lg shutdown-privileged"
