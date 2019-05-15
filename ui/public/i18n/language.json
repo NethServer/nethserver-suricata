@@ -57,7 +57,7 @@
     "reset": "Reset",
     "configuration_categories_change": "There are categories changes not yet applied. Click on 'Apply changes' to update",
     "actions": "Actions",
-    "reset_default": "Get defaults categories",
+    "reset_default": "Restore defaults categories",
     "enable_all": "Enable all categories",
     "disable_all": "Disable all categories"
   },
