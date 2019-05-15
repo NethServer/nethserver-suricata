@@ -25,7 +25,8 @@
     "rules_failed": "Rules failed",
     "evebox": "Evebox alerts",
     "suricata": "Suricata statistics",
-    "open_evebox": "Open EveBox"
+    "open_evebox": "Open EveBox",
+    "suricata_is_not_running": "Suricata is not running"
   },
   "configuration": {
     "menu_title": "Configuration",

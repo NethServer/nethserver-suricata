@@ -97,7 +97,7 @@
       <div class="divider"></div>
       <h2>
         {{$t('dashboard.suricata')}}
-        <span class="gray min-size right">
+        <span v-if="counters.uptime > 0" class="gray min-size right">
           <i18n path="dashboard.last_updated">
             <span place="time">{{counters.uptime | secondsInHour}}</span>
           </i18n>
@@ -105,10 +105,19 @@
       </h2>
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="no-mg-top">{{ $t('dashboard.counters') }}</h3>
+          <h3 v-if="counters.uptime > 0" class="no-mg-top">{{ $t('dashboard.counters') }}</h3>
           <div class="row row-stat">
             <div class="row-inline-block">
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div v-if="counters.uptime == 0" class="alert alert-info alert-dismissable">
+                <span class="pficon pficon-info"></span>
+                <strong>{{$t('info')}}:</strong>
+                {{$t('dashboard.suricata_is_not_running')}}.
+              </div>
+
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.accepted}}</span>
@@ -118,7 +127,10 @@
                   >{{$t('dashboard.accepted')}}</span>
                 </span>
               </div>
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.blocked}}</span>
@@ -128,7 +140,10 @@
                   >{{$t('dashboard.blocked')}}</span>
                 </span>
               </div>
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.replaced}}</span>
@@ -138,7 +153,10 @@
                   >{{$t('dashboard.replaced')}}</span>
                 </span>
               </div>
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.rejected}}</span>
@@ -148,7 +166,10 @@
                   >{{$t('dashboard.rejected')}}</span>
                 </span>
               </div>
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.rules_loaded}}</span>
@@ -158,7 +179,10 @@
                   >{{$t('dashboard.rules_loaded')}}</span>
                 </span>
               </div>
-              <div class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2">
+              <div
+                v-if="counters.uptime > 0"
+                class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
+              >
                 <span
                   class="card-pf-utilization-card-details-count stats-count"
                 >{{counters.rules_failed}}</span>
