@@ -124,25 +124,36 @@
       <h3
         v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
       >{{$t('configuration.category_list')}}</h3>
-      <form
-        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
-        role="form"
-        class="search-pf has-button search"
-      >
-        <div class="form-group has-clear">
-          <div class="search-pf-input-group">
-            <label class="sr-only">Search</label>
-            <input
-              v-focus
-              type="search"
-              v-model="searchString"
-              class="form-control input-lg"
-              :placeholder="$t('search')+'...'"
-              id="pf-search-list"
-            >
+      <div class="row">
+        <form
+          v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+          role="form"
+          class="search-pf has-button search col-sm-6"
+        >
+          <div class="form-group has-clear">
+            <div class="search-pf-input-group">
+              <label class="sr-only">Search</label>
+              <input
+                v-focus
+                type="search"
+                v-model="searchString"
+                class="form-control input-lg"
+                :placeholder="$t('search')+'...'"
+                id="pf-search-list"
+              >
+            </div>
           </div>
+        </form>
+        <div class="adjust-filter-cat col-sm-6">
+          {{$t('configuration.filter_by')}}:
+          <select v-model="filterCat" class="selectpicker">
+            <option value="all">{{$t('configuration.all')}}</option>
+            <option value="alert">{{$t('configuration.alert')}}</option>
+            <option value="block">{{$t('configuration.block')}}</option>
+            <option value="disable">{{$t('configuration.disable')}}</option>
+          </select>
         </div>
-      </form>
+      </div>
 
       <div
         v-if="configuration.status == 'enabled' && configuration.categories.length == 0"
@@ -268,6 +279,7 @@ export default {
         isLoaded: false
       },
       searchString: "",
+      filterCat: "all",
       configuration: {
         categories: [],
         status: ""
@@ -282,7 +294,13 @@ export default {
       for (var r in this.configuration.categories) {
         var cat = JSON.stringify(this.configuration.categories[r]);
         if (cat.toLowerCase().includes(this.searchString.toLowerCase())) {
-          returnObj.push(this.configuration.categories[r]);
+          if (this.filterCat == "all") {
+            returnObj.push(this.configuration.categories[r]);
+          } else {
+            if (this.configuration.categories[r].status == this.filterCat) {
+              returnObj.push(this.configuration.categories[r]);
+            }
+          }
         }
       }
 
@@ -353,6 +371,11 @@ export default {
           context.configuration = success;
 
           context.changesNeeded = 0;
+
+          setTimeout(function() {
+            window.jQuery(".selectpicker").selectpicker();
+          }, 250);
+
           context.view.isLoaded = true;
         },
         function(error) {
@@ -461,5 +484,8 @@ export default {
 }
 .adjust-divider {
   margin-top: 15px;
+}
+.adjust-filter-cat {
+  margin-top: 5px;
 }
 </style>

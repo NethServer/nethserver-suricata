@@ -35,6 +35,7 @@
     "category_list": "Categories list",
     "alert": "Alert",
     "block": "Block",
+    "all": "-",
     "enable": "Enable",
     "disable": "Disable",
     "ips": "IPS",
@@ -60,7 +61,8 @@
     "actions": "Actions",
     "reset_default": "Restore defaults categories",
     "enable_all": "Enable all categories",
-    "disable_all": "Disable all categories"
+    "disable_all": "Disable all categories",
+    "filter_by": "Filter by"
   },
   "logs": {
     "title": "Logs",
