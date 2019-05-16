@@ -1,0 +1,22 @@
+{
+  "id": "nethserver-suricata",
+  "name": "IPS",
+  "summary": "The Intrusion Prevention System",
+  "description": "The IPS (Intrusion Prevention System) module configures Suricata using the netfilter queue (NFQUEUE)",
+  "homepage": "https://github.com/NethServer/nethserver-suricata",
+  "url": "",
+  "provides": ["nethserver-suricata"],
+  "release": {
+    "version": "1.0.0"
+  },
+  "tags": ["ips", "suricata", "evebox"],
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/NethServer/dev/issues"
+  },
+  "author": {
+    "name": "Edoardo Spadoni, Giacomo Sanchietti",
+    "url": "https://github.com/NethServer/nethserver-suricata",
+    "email": "edoardo.spadoni@nethesis.it, giacomo.sanchietti@nethesis.it"
+  }
+}

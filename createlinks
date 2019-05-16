@@ -50,6 +50,10 @@ event_templates($event,
     '/etc/logrotate.d/suricata'
 );
 
+event_actions($event, qw(
+   nethserver-suricata-apply-rules 20
+   firewall-adjust 30
+));
 event_services($event, 'suricata' => 'restart');
 
 #--------------------------------------------------

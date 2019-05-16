@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#
+# Copyright (C) 2018 Nethesis S.r.l.
+# http://www.nethesis.it - nethserver@nethesis.it
+#
+# This script is part of NethServer.
+#
+# NethServer is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# NethServer is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NethServer.  If not, see COPYING.
+#
+
+. /usr/libexec/nethserver/api/lib/helper_functions
+
+function _get
+{
+    field=$1
+    echo $data | jq -r ".$field"
+}
+
+
+data=$(cat /dev/stdin)
+action="$(_get action)"
+
+
+case $action in
+    "configuration")
+        block=$(echo $data | jq -rc '[.categories[] | select(.status == "block") | .name] | map(tostring) | join(",")')
+        alert=$(echo $data | jq -rc '[.categories[] | select(.status == "alert") | .name] | map(tostring) | join(",")')
+
+        /sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
+        /sbin/e-smith/signal-event -j nethserver-suricata-save
+        ;;
+
+    "download")
+        /sbin/e-smith/signal-event -j nethserver-pulledpork-save
+        ;;
+
+    *)
+        error;;
+esac
+
+
+if [ $? -gt 0 ]; then
+    error "EventFailed" "See /var/log/messages"
+else
+    success
+fi
