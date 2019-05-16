@@ -97,7 +97,7 @@ stats:
   enabled: yes
   # The interval field (in seconds) controls at what interval
   # the loggers are invoked.
-  interval: 60
+  interval: 8
   append: no
 
 # Configure the type of alert (and other) logging you would like.
