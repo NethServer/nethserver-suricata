@@ -59,7 +59,7 @@
     "reset": "Reset",
     "configuration_categories_change": "There are categories changes not yet applied. Click on 'Apply changes' to update",
     "actions": "Actions",
-    "reset_default": "Apply default configuration",
+    "reset_default": "Set default configuration",
     "enable_all": "Enable all categories",
     "disable_all": "Disable all categories",
     "filter_by": "Filter by"
