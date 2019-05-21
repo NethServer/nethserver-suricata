@@ -54,7 +54,10 @@
     <div v-show="view.isLoaded">
       <h3 v-if="configuration.status == 'enabled'">{{ $t('configuration.ips') }}</h3>
 
-      <div v-if="configuration.status == 'disabled'" class="blank-slate-pf">
+      <div
+        v-if="configuration.status == 'disabled' && configuration.categories.length > 0"
+        class="blank-slate-pf"
+      >
         <h1>{{$t('configuration.ips_is_disabled')}}</h1>
         <p>{{$t('configuration.ips_is_disabled_desc')}}.</p>
         <div class="blank-slate-pf-main-action">
@@ -84,13 +87,8 @@
         </div>
       </div>
 
-      <h3
-        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
-      >{{$t('configuration.actions')}}</h3>
-      <div
-        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
-        class="btn-group"
-      >
+      <h3 v-if="configuration.categories.length > 0">{{$t('configuration.actions')}}</h3>
+      <div v-if="configuration.categories.length > 0" class="btn-group">
         <button
           @click="resetDefault()"
           class="btn btn-primary btn-lg shutdown-privileged"
@@ -121,15 +119,9 @@
         </ul>
       </div>
 
-      <h3
-        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
-      >{{$t('configuration.category_list')}}</h3>
-      <div class="row">
-        <form
-          v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
-          role="form"
-          class="search-pf has-button search col-sm-6"
-        >
+      <h3 v-if="configuration.categories.length > 0">{{$t('configuration.category_list')}}</h3>
+      <div v-if="configuration.categories.length > 0" class="row">
+        <form role="form" class="search-pf has-button search col-sm-6">
           <div class="form-group has-clear">
             <div class="search-pf-input-group">
               <label class="sr-only">Search</label>
@@ -155,10 +147,7 @@
         </div>
       </div>
 
-      <div
-        v-if="configuration.status == 'enabled' && configuration.categories.length == 0"
-        class="blank-slate-pf"
-      >
+      <div v-if="configuration.categories.length == 0" class="blank-slate-pf">
         <div class="blank-slate-pf-icon">
           <span class="fa fa-ban"></span>
         </div>
@@ -173,7 +162,7 @@
       </div>
 
       <div
-        v-if="configuration.status == 'enabled' && configuration.categories.length > 0"
+        v-if="configuration.categories.length > 0"
         class="list-group list-view-pf list-view-pf-view no-mg-top mg-top-10"
       >
         <div
@@ -406,6 +395,7 @@ export default {
         function(success) {
           // get all
           context.getConfiguration();
+          context.getDefaultCategories();
         },
         function(error, data) {
           console.error(error, data);
@@ -447,6 +437,7 @@ export default {
           // get all
           context.changesNeeded = 0;
           context.getConfiguration();
+          context.getDefaultCategories();
         },
         function(error, data) {
           console.error(error, data);

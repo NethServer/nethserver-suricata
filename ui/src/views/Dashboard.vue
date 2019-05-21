@@ -34,6 +34,15 @@
       </h2>
       <div class="row">
         <div class="col-sm-6">
+          <a
+            :href="eveboxUrl"
+            class="btn btn-primary mg-bottom-10"
+            target="_blank"
+          >{{$t('dashboard.open_evebox')}}</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
           <h3 class="no-mg-top">{{$t('dashboard.categories')}}</h3>
           <div v-show="Object.keys(alerts.categories).length == 0" class="empty-piechart">
             <span class="fa fa-pie-chart"></span>
@@ -81,16 +90,6 @@
             <strong>{{$t('info')}}:</strong>
             {{$t('dashboard.no_data_found')}}.
           </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-6">
-          <a
-            :href="eveboxUrl"
-            class="btn btn-primary mg-bottom-10"
-            target="_blank"
-          >{{$t('dashboard.open_evebox')}}</a>
         </div>
       </div>
 
