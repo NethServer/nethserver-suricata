@@ -39,6 +39,7 @@ case $action in
         alert=$(echo $data | jq -rc '[.categories[] | select(.status == "alert") | .name] | map(tostring) | join(",")')
 
         /sbin/e-smith/config setprop suricata BlockCategories "$block" AlertCategories "$alert" status "$(_get status)"
+        /sbin/e-smith/config setprop firewall nfqueue "$(_get status)"
         /sbin/e-smith/signal-event -j nethserver-suricata-save
         ;;
 
