@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 1.2.0
+Version: 1.2.1
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -55,6 +55,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/nethserver/api/%{name}/
 
 %changelog
+* Wed Jul 17 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.1-1
+- Cockpit: fix IPS enable/disable action (#15)
+- Cockpit: update JavaScript dependencies for security issues
+- Cockpit: remember last visited route
+
 * Tue May 28 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.0-1
 - IPS Cockpit UI - NethServer/dev#5756
 
