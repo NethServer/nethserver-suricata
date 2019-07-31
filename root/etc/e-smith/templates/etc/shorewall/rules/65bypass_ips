@@ -1,0 +1,46 @@
+#
+# 65bypass_ips
+#
+{
+    use esmith::ConfigDB;
+    use NethServer::Firewall;
+
+    my $fw = new NethServer::Firewall();
+    my $db = esmith::ConfigDB->open_ro();
+    my $ipsdb = esmith::ConfigDB->open_ro('ips');
+
+    my $ips_records = $ipsdb->get_all();
+
+    my $status = $db->get_prop('suricata', 'status');
+
+    if ($status eq 'enabled' and $ips_records > 0) {
+
+        $OUT .= "# All bypass src\n";
+        foreach my $bypass_src ($ipsdb->get_all_by_prop('type' => 'bypass-src')) {
+            my %props = $bypass_src->props;
+
+            my $addr = $fw->getAddress($props{'Src'}, 1);
+            my $out = $fw->getZone($addr);
+            $OUT .= "#    $out\n";
+            $OUT .= "?COMMENT IPS bypass src\n";
+            $OUT .= "{source:$out, dest:any, action:MARK(|0x10)}\n";
+        }
+
+        $OUT .= "\n# All bypass dst\n";
+        foreach my $bypass_dst ($ipsdb->get_all_by_prop('type' => 'bypass-dst')) {
+            my %props = $bypass_dst->props;
+
+            my $addr = $fw->getAddress($props{'Dst'}, 1);
+            my $out = $fw->getZone($addr);
+            $OUT .= "#    $out\n";
+            $OUT .= "?COMMENT IPS bypass dst\n";
+            $OUT .= "{source:any, dest:$out, action:MARK(|0x10)}\n";
+        }
+
+        $OUT .= "\n# Bypass MARKed packets\n";
+        $OUT .= "?COMMENT\n";
+        $OUT .= "ACCEPT any any - - - - - - 0x10/0xf0\n";
+    } else {
+        $OUT .= "";
+    }
+}
