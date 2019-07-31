@@ -52,6 +52,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}-%{version}-%{release}-filelist
 %defattr(-,root,root)
 %dir %{_nseventsdir}/%{name}-update
+%dir %{_nsdbconfdir}/ips
 /usr/libexec/nethserver/api/%{name}/
 
 %changelog
