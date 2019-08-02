@@ -46,6 +46,15 @@
             <span class="list-group-item-value">{{$t('configuration.menu_title')}}</span>
           </a>
         </li>
+        <li
+          id="bypass-item"
+          v-bind:class="[getCurrentPath('bypass') ? 'active' : '', 'list-group-item']"
+        >
+          <a href="#/bypass">
+            <span class="pficon pficon-middleware"></span>
+            <span class="list-group-item-value">{{$t('bypass.menu_title')}}</span>
+          </a>
+        </li>
         <li class="li-empty"></li>
         <li
           id="logs-item"
@@ -69,7 +78,7 @@
       </ul>
     </nav>
     <div class="container-fluid container-cards-pf">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
@@ -241,6 +250,22 @@ export default {
 
 .blue {
   color: #0088ce !important;
+}
+
+.v-suggestions .items {
+  max-height: 290px;
+  overflow-y: hidden;
+  border: 1px solid #bbb;
+  border-width: 1px;
+}
+
+.v-suggestions .suggestions {
+  top: 23px;
+  background-color: #fff;
+  border-radius: 1px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  font-size: 12px;
+  text-align: left;
 }
 
 .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {

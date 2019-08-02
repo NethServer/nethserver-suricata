@@ -44,19 +44,19 @@
       <div class="row">
         <div class="col-sm-6">
           <h3 class="no-mg-top">{{$t('dashboard.categories')}}</h3>
-          <div v-show="Object.keys(alerts.categories).length == 0" class="empty-piechart">
+          <div v-show="Object.keys(alerts && alerts.categories).length == 0" class="empty-piechart">
             <span class="fa fa-pie-chart"></span>
             <div>{{ $t('dashboard.empty_piechart_label') }}</div>
           </div>
-          <div v-show="Object.keys(alerts.categories).length > 0" id="stats-categories-pie-chart"></div>
+          <div v-show="Object.keys(alerts && alerts.categories).length > 0" id="stats-categories-pie-chart"></div>
         </div>
         <div class="col-sm-6">
           <h3 class="no-mg-top">{{$t('dashboard.severities')}}</h3>
-          <div v-show="Object.keys(alerts.severities).length == 0" class="empty-piechart">
+          <div v-show="Object.keys(alerts && alerts.severities).length == 0" class="empty-piechart">
             <span class="fa fa-pie-chart"></span>
             <div>{{ $t('dashboard.empty_piechart_label') }}</div>
           </div>
-          <div v-show="Object.keys(alerts.severities).length > 0" id="stats-severities-pie-chart"></div>
+          <div v-show="Object.keys(alerts && alerts.severities).length > 0" id="stats-severities-pie-chart"></div>
         </div>
       </div>
 
@@ -234,9 +234,9 @@ export default {
       if (!this.severitiesPieChart) {
         var names = {};
         var columns = [];
-        for (var i in this.alerts.severities) {
+        for (var i in this.alerts && this.alerts.severities) {
           names[i] = i;
-          var col = [i, this.alerts.severities[i]];
+          var col = [i, this.alerts && this.alerts.severities[i]];
           columns.push(col);
         }
         this.severitiesPieChart = generatePieChart(
@@ -267,9 +267,9 @@ export default {
       if (!this.categoriesPieChart) {
         var names = {};
         var columns = [];
-        for (var i in this.alerts.categories) {
+        for (var i in this.alerts && this.alerts.categories) {
           names[i] = i;
-          var col = [i, this.alerts.categories[i]];
+          var col = [i, this.alerts && this.alerts.categories[i]];
           columns.push(col);
         }
         this.categoriesPieChart = generatePieChart(

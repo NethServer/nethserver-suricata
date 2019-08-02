@@ -4,6 +4,15 @@
   "info": "Info",
   "search": "Search",
   "warning": "Warning",
+  "actions": "Actions",
+  "action": "Action",
+  "list": "List",
+  "save": "Save",
+  "edit": "Edit",
+  "enable": "Enable",
+  "disable": "Disable",
+  "delete": "Delete",
+  "are_you_sure": "Are you sure",
   "dashboard": {
     "menu_title": "IPS",
     "title": "IPS dashboard",
@@ -64,6 +73,32 @@
     "disable_all": "Disable all categories",
     "filter_by": "Filter by"
   },
+  "bypass": {
+    "menu_title": "Bypass",
+    "title": "Bypass",
+    "source": "Source",
+    "destination": "Destination",
+    "description": "Description",
+    "bypass": "Bypass",
+    "add_source": "Add source",
+    "edit_source": "Edit source",
+    "delete_source": "Delete source",
+    "add_destination": "Add destination",
+    "edit_destination": "Edit destination",
+    "delete_destination": "Delete destination",
+    "source_created_ok": "Source created successfully!",
+    "source_created_error": "Source not created.",
+    "source_updated_ok": "Source updated successfully!",
+    "source_updated_error": "Source not updated.",
+    "source_deleted_ok": "Source deleted successfully!",
+    "source_deleted_error": "Source not deleted.",
+    "destination_created_ok": "Destination created successfully!",
+    "destination_created_error": "Destination not created.",
+    "destination_updated_ok": "Destination updated successfully!",
+    "destination_updated_error": "Destination not updated.",
+    "destination_deleted_ok": "Destination deleted successfully!",
+    "destination_deleted_error": "Destination not deleted."
+  },
   "logs": {
     "title": "Logs",
     "start_follow_button": "Follow",
@@ -78,5 +113,11 @@
   "docs": {
     "more_info_about": "More info about {docsLink}.",
     "ips": "Configuration of IPS"
+  },
+  "validation": {
+    "validation_failed": "Validation failed",
+    "source_already_exists": "A bypass for the same source already exists",
+    "object_not_found": "Object not found",
+    "object_not_supported": "Object not supported"
   }
 }
