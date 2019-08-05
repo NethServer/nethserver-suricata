@@ -15,7 +15,5 @@
         $OUT .= "\n# Bypass MARKed packets\n";
         $OUT .= "?COMMENT\n";
         $OUT .= "ACCEPT any any - - - - - - 0x10/0xf0\n";
-    } else {
-        $OUT .= "";
     }
 }
