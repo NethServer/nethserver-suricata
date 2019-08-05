@@ -20,7 +20,11 @@
             my %props = $bypass_src->props;
 
             if ($props{'status'} eq 'enabled') {
-                my $addr = $fw->getAddress($props{'Host'}, 1);
+                my @spl = split(';', $props{'Host'});
+                my $addr = $spl[1];
+                if($spl[0] ne 'raw'){
+                    $addr = $fw->getAddress($props{'Host'}, 1);
+                }
                 my $out = $fw->getZone($addr);
                 $OUT .= "#    $out\n";
                 $OUT .= "?COMMENT IPS bypass src\n";
@@ -33,7 +37,11 @@
             my %props = $bypass_dst->props;
 
             if ($props{'status'} eq 'enabled') {
-                my $addr = $fw->getAddress($props{'Host'}, 1);
+                my @spl = split(';', $props{'Host'});
+                my $addr = $spl[1];
+                if($spl[0] ne 'raw'){
+                    $addr = $fw->getAddress($props{'Host'}, 1);
+                }
                 my $out = $fw->getZone($addr);
                 $OUT .= "#    $out\n";
                 $OUT .= "?COMMENT IPS bypass dst\n";

@@ -704,7 +704,7 @@ export default {
       var sourceObj = {
         action: source.isEdit ? "update-bypass" : "create-bypass",
         Host: {
-          type: source.Type,
+          type: source.Type || "raw",
           name: source.Source
         },
         Description: source.Description,
@@ -794,23 +794,14 @@ export default {
 
       var destinationObj = {
         action: destination.isEdit ? "update-bypass" : "create-bypass",
+        Host: {
+          type: destination.Type || "raw",
+          name: destination.Destination
+        },
         Description: destination.Description,
         name: destination.isEdit ? destination.name : null,
         type: "bypass-dst"
       };
-
-      if (destination.Type) {
-        destinationObj["Host"] = {
-          type: destination.Type,
-          name: destination.Destination
-        };
-      } else {
-        destinationObj["Domains"] = destination.Destination.split(",").map(
-          function(d) {
-            return d.trim();
-          }
-        );
-      }
 
       context.currentDestination.isLoading = true;
       context.$forceUpdate();
