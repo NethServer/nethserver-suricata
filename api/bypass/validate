@@ -31,7 +31,7 @@ $v = new LegacyValidator($data);
     $fdb = new EsmithDatabase('ips');
 
     # search for existing bypass with the same Host
-    if ($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') {
+    if (($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') && $data['type'] == 'bypass-src') {
         foreach ($fdb->getAll('bypass-src') as $bypass) {
             list($type, $name) = explode(";",$bypass['Host']);
             if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
@@ -39,11 +39,29 @@ $v = new LegacyValidator($data);
             }
         }
     }
+    if (($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') && $data['type'] == 'bypass-dst') {
+        foreach ($fdb->getAll('bypass-dst') as $bypass) {
+            list($type, $name) = explode(";",$bypass['Host']);
+            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
+                $v->addValidationError('Host', 'destination_already_exists');
+            }
+        }
+    }
 
     $v->declareParameter('status', Validate::SERVICESTATUS);
-    if (isset($data['Host']) && $data['Host']) {
+
+    if (isset($data['Host']) && $data['Host'] && $data['Host']['type'] != 'raw') {
         if (!$hdb->getKey($data['Host']['name'])) {
             $v->addValidationError('Host', 'object_not_found');
+        }
+    }
+
+    $ip_v = $v->createValidator(Validate::IPv4);
+    $cidr_v = $v->createValidator(Validate::CIDR_BLOCK);
+    $ip_cidr_v = $v->createValidator()->orValidator($ip_v, $cidr_v);
+    if (isset($data['Host']) && $data['Host'] && $data['Host']['type'] == 'raw') {
+        if (!$ip_cidr_v->evaluate($data['Host']['name'])) {
+            $v->addValidationError('Host', 'valid_ip_or_cidr', $data['Host']);
         }
     }
     if ($data['action'] == 'update-bypass') {

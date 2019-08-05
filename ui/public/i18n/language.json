@@ -117,7 +117,9 @@
   "validation": {
     "validation_failed": "Validation failed",
     "source_already_exists": "A bypass for the same source already exists",
+    "destination_already_exists": "A bypass for the same destination already exists",
     "object_not_found": "Object not found",
-    "object_not_supported": "Object not supported"
+    "object_not_supported": "Object not supported",
+    "valid_ip_or_cidr": "Must be a valid ip or cidr"
   }
 }
