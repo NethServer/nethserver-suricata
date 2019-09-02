@@ -7,7 +7,7 @@
   "url": "",
   "provides": ["nethserver-suricata"],
   "release": {
-    "version": "1.0.0"
+    "version": "_RELEASE_"
   },
   "tags": ["ips", "suricata", "evebox"],
   "license": "GPL-3.0",
