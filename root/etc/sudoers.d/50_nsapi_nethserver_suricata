@@ -1,0 +1,10 @@
+#
+# nsapi_nethserver_suricata
+#
+Cmnd_Alias NSAPI_NETHSERVER_SURICATA = \
+    /usr/libexec/nethserver/api/nethserver-suricata/configuration/read, \
+    /usr/libexec/nethserver/api/nethserver-suricata/configuration/update, \
+    /usr/libexec/nethserver/api/nethserver-suricata/configuration/validate, \
+    /usr/libexec/nethserver/api/nethserver-suricata/dashboard/read
+￼
+Defaults!NSAPI_NETHSERVER_SURICATA !requiretty
