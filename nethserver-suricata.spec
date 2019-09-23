@@ -39,7 +39,7 @@ cp -a %{name}.json %{buildroot}/usr/share/cockpit/nethserver/applications/
 cp -a api/* %{buildroot}/usr/libexec/nethserver/api/%{name}/
 
 (cd root ; find . -depth -print | cpio -dump %{buildroot})
-%{genfilelist} %{buildroot} > %{name}-%{version}-%{release}-filelist
+%{genfilelist} %{buildroot} --file /etc/sudoers.d/50_nsapi_nethserver_suricata 'attr(0440,root,root)' > %{name}-%{version}-%{release}-filelist
 echo "%doc COPYING" >> %{name}-%{version}-%{release}-filelist
 
 
