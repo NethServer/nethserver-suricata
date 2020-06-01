@@ -113,7 +113,7 @@ class IPS extends \Nethgui\Controller\AbstractController
     public function initialize()
     {
         $this->readCategories();
-        $this->declareParameter('status', Validate::SERVICESTATUS, array(array('configuration', 'suricata', 'status'), array('configuration', 'firewall', 'nfqueue')));
+        $this->declareParameter('status', Validate::SERVICESTATUS, array('configuration', 'suricata', 'status'));
         $this->declareParameter('Categories', Validate::ANYTHING);
         parent::initialize();
     }
