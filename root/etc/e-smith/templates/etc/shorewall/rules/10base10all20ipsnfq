@@ -1,0 +1,6 @@
+{
+    my $status = $suricata{'status'} || 'enabled';
+    if ($status eq 'enabled') {
+        $OUT.="NFQUEUE(bypass) all+ all+:!127.0.0.1/32 - - - - - - !0x10/0x10\n";
+    }
+}

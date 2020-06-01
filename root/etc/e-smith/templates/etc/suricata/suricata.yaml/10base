@@ -1378,12 +1378,12 @@ profiling:
 # On linux >= 3.6, you can set the fail-open option to yes to have the kernel
 # accept the packet if suricata is not able to keep pace.
 nfq:
-#  mode: accept
-#  repeat-mark: 1
-#  repeat-mask: 1
+  mode: repeat
+  repeat-mark: 16
+  repeat-mask: 16
 #  route-queue: 2
 #  batchcount: 20
-#  fail-open: yes
+  fail-open: yes
 
 #nflog support
 nflog:
