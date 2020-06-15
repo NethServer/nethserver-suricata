@@ -10,7 +10,8 @@ Source1: %{name}-ui.tar.gz
 BuildArch: noarch
 
 Requires: suricata
-Requires: nethserver-firewall-base, nethserver-pulledpork
+Requires: nethserver-firewall-base > 3.9.2
+Requires: nethserver-pulledpork
 
 Conflicts: nethserver-snort
 
