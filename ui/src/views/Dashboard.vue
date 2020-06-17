@@ -118,8 +118,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.accepted}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.accepted"
+                >{{counters.accepted | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
@@ -131,8 +131,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.blocked}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.blocked"
+                >{{counters.blocked | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
@@ -144,8 +144,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.replaced}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.replaced"
+                >{{counters.replaced | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
@@ -157,8 +157,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.rejected}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.rejected"
+                >{{counters.rejected | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
@@ -170,8 +170,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.rules_loaded}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.rules_loaded"
+                >{{counters.rules_loaded | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
@@ -183,8 +183,8 @@
                 class="stats-container col-xs-12 col-sm-6 col-md-2 col-lg-2"
               >
                 <span
-                  class="card-pf-utilization-card-details-count stats-count"
-                >{{counters.rules_failed}}</span>
+                  class="card-pf-utilization-card-details-count stats-count" :title="counters.rules_failed"
+                >{{counters.rules_failed | humanFormat}}</span>
                 <span class="card-pf-utilization-card-details-description stats-description">
                   <span
                     class="card-pf-utilization-card-details-line-2 stats-text"
