@@ -791,7 +791,7 @@ app-layer:
     tls:
       enabled: yes
       detection-ports:
-        dp: 443
+        dp: 443,465,853,993,995
 
       # Generate JA3 fingerprint from client hello
       ja3-fingerprints: no
