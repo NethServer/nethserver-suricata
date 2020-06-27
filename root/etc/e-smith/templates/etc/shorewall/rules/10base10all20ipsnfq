@@ -1,7 +1,12 @@
 {
     my $status = $suricata{'status'} || 'enabled';
     if ($status eq 'enabled') {
-        $OUT.="ACCEPT \$FW \$FW\n";
-        $OUT.="NFQUEUE(bypass) all+ all+ - - - - - - !0x10/0x10\n";
+      chomp(my $cpu_count = `nproc --all`);
+      my $nfq = '';
+      if ($cpu_count > 1) {
+        $nfq = "--queue-balance 0:" . ($cpu_count - 1) . " --queue-cpu-fanout";
+      }
+      $OUT.="ACCEPT \$FW \$FW\n";
+      $OUT.="INLINE all+ all+ - - - - - - !0x10/0x10; -j NFQUEUE --queue-bypass $nfq\n";
     }
 }
