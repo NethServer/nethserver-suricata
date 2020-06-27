@@ -5,4 +5,12 @@
 # --group <group name>
 
 # Add options to be passed to the daemon
-OPTIONS="-q 0 --user suricata "
+{
+  chomp(my $cpu_count = `nproc --all`);
+  my $nfq = '';
+  for (my $q = 0; $q < $cpu_count; $q++) {
+    $nfq .= "-q $q ";
+  }
+
+  $OUT .= "OPTIONS=\"$nfq --user suricata \"";
+}
