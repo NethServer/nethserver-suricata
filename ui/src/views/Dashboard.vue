@@ -251,7 +251,7 @@ export default {
             }
           },
           {
-            width: window.innerWidth * 0.5,
+            width: window.innerWidth * 0.4,
             height: 175
           },
           {
