@@ -1,5 +1,5 @@
 #
-# 65bypass_ips
+# 10base10all15ipsbypass
 #
 {
     use esmith::ConfigDB;
@@ -15,7 +15,6 @@
 
     if ($status eq 'enabled' and $ips_records > 0) {
 
-        $OUT .= "# All bypass src\n";
         foreach my $bypass_src ($ipsdb->get_all_by_prop('type' => 'bypass-src')) {
             my %props = $bypass_src->props;
 
@@ -32,7 +31,6 @@
             }
         }
 
-        $OUT .= "\n# All bypass dst\n";
         foreach my $bypass_dst ($ipsdb->get_all_by_prop('type' => 'bypass-dst')) {
             my %props = $bypass_dst->props;
 
@@ -49,9 +47,6 @@
             }
         }
 
-        $OUT .= "\n# Bypass MARKed packets\n";
-        $OUT .= "?COMMENT\n";
-        $OUT .= "ACCEPT any any - - - - - - 0x10/0xf0\n";
     } else {
         $OUT .= "";
     }
