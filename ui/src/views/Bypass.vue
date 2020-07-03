@@ -40,18 +40,29 @@
           :columns="sourceColumns"
           :rows="sourceRows"
           :lineNumbers="false"
-          :defaultSortBy="{field: 'name', type: 'asc'}"
-          :globalSearch="true"
-          :paginate="true"
-          styleClass="table"
-          :nextText="tableLangsTexts.nextText"
-          :prevText="tableLangsTexts.prevText"
-          :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-          :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-          :ofText="tableLangsTexts.ofText"
+          :sort-options="{
+            enabled: true,
+            initialSortBy: {field: 'name', type: 'asc'},
+          }"
+          :search-options="{
+            enabled: true,
+            placeholder: tableLangsTexts.globalSearchPlaceholder,
+          }"
+          styleClass="table responsive vgt2"
+          :pagination-options="{
+            enabled: true,
+            rowsPerPageLabel: tableLangsTexts.rowsPerPageText,
+            nextLabel: tableLangsTexts.nextText,
+            prevLabel: tableLangsTexts.prevText,
+            ofLabel: tableLangsTexts.ofText,
+            dropdownAllowAll: false,
+          }"
         >
           <template slot="table-row" slot-scope="props">
-            <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
+            <span
+              v-if="props.column.field == 'props.Host.name'"
+              :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']"
+            >
               <span class="fa fa-user span-right-icon"></span>
               <a
                 :class="['mg-left-5', props.row.props.status == 'enabled' ? '' : 'gray']"
@@ -60,11 +71,14 @@
                 <strong>{{ props.row.props.Host.name}}</strong>
                 <span class="gray mg-left-5">({{ props.row.props.Host.type}})</span>
               </a>
-            </td>
-            <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
+            </span>
+            <span
+              v-if="props.column.field == 'props.Description'"
+              :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']"
+            >
               <span>{{props.row.props.Description}}</span>
-            </td>
-            <td>
+            </span>
+            <span v-if="props.column.field == 'action'">
               <button
                 @click="props.row.props.status == 'disabled' ? toggleSourceStatus(props.row) : openEditSource(props.row)"
                 :class="['btn btn-default', props.row.props.status == 'disabled' ? 'btn-primary' : '']"
@@ -103,7 +117,7 @@
                   </li>
                 </ul>
               </div>
-            </td>
+            </span>
           </template>
         </vue-good-table>
       </div>
@@ -129,18 +143,29 @@
           :columns="destinationColumns"
           :rows="destinationRows"
           :lineNumbers="false"
-          :defaultSortBy="{field: 'name', type: 'asc'}"
-          :globalSearch="true"
-          :paginate="true"
-          styleClass="table"
-          :nextText="tableLangsTexts.nextText"
-          :prevText="tableLangsTexts.prevText"
-          :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-          :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-          :ofText="tableLangsTexts.ofText"
+          :sort-options="{
+            enabled: true,
+            initialSortBy: {field: 'name', type: 'asc'},
+          }"
+          :search-options="{
+            enabled: true,
+            placeholder: tableLangsTexts.globalSearchPlaceholder,
+          }"
+          styleClass="table responsive vgt2"
+          :pagination-options="{
+            enabled: true,
+            rowsPerPageLabel: tableLangsTexts.rowsPerPageText,
+            nextLabel: tableLangsTexts.nextText,
+            prevLabel: tableLangsTexts.prevText,
+            ofLabel: tableLangsTexts.ofText,
+            dropdownAllowAll: false,
+          }"
         >
           <template slot="table-row" slot-scope="props">
-            <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
+            <span
+              v-if="props.column.field == 'props.Host.name'"
+              :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']"
+            >
               <span class="fa fa-user span-right-icon"></span>
               <a
                 :class="['mg-left-5', props.row.props.status == 'enabled' ? '' : 'gray']"
@@ -149,11 +174,14 @@
                 <strong>{{ props.row.props.Host.name}}</strong>
                 <span class="gray mg-left-5">({{ props.row.props.Host.type}})</span>
               </a>
-            </td>
-            <td :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']">
+            </span>
+            <span
+              v-if="props.column.field == 'props.Description'"
+              :class="['fancy', props.row.props.status == 'enabled' ? '' : 'gray']"
+            >
               <span>{{props.row.props.Description}}</span>
-            </td>
-            <td>
+            </span>
+            <span v-if="props.column.field == 'action'">
               <button
                 @click="props.row.props.status == 'disabled' ? toggleDestinationStatus(props.row) : openEditDestination(props.row)"
                 :class="['btn btn-default', props.row.props.status == 'disabled' ? 'btn-primary' : '']"
@@ -192,7 +220,7 @@
                   </li>
                 </ul>
               </div>
-            </td>
+            </span>
           </template>
         </vue-good-table>
       </div>
@@ -451,7 +479,7 @@ export default {
         },
         {
           label: this.$i18n.t("action"),
-          field: "",
+          field: "action",
           filterable: true,
           sortable: false
         }
@@ -470,7 +498,7 @@ export default {
         },
         {
           label: this.$i18n.t("action"),
-          field: "",
+          field: "action",
           filterable: true,
           sortable: false
         }
@@ -1010,5 +1038,10 @@ export default {
 <style scoped>
 .proxy-details {
   margin-left: 10px;
+}
+
+.span-right-icon {
+  font-size: 15px;
+  margin-right: 8px;
 }
 </style>
