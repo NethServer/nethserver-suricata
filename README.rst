@@ -47,6 +47,13 @@ Example: ::
     Host=192.168.0.1
     status=disabled
 
+Custom rules
+============
+
+If a file named ``/etc/suricata/rules/custom.rules``, it will be included inside Suricata configuration.
+After creating the file, remember to add it to the configuration backup: ::
+
+  echo /etc/suricata/rules/custom.rules >> /etc/backup-config.d/custom.include
 
 Troubleshooting
 ===============
