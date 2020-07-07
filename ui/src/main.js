@@ -29,16 +29,28 @@ Vue.component("v-select", vSelect);
 import VueToggleButton from "vue-js-toggle-button";
 Vue.use(VueToggleButton);
 
+import "v-suggestions/dist/v-suggestions.css";
+import VueSuggestions from "v-suggestions";
+Vue.component("suggestions", VueSuggestions);
+
+import VueGoodTable from "vue-good-table";
+import 'vue-good-table/dist/vue-good-table.css'
+Vue.use(VueGoodTable);
+
 import DocInfo from "./components/DocInfo.vue";
 Vue.component("doc-info", DocInfo);
 
 import App from "./App.vue";
 import Dashboard from "./views/Dashboard.vue";
 import Configuration from "./views/Configuration.vue";
+import Bypass from "./views/Bypass.vue";
 import Logs from "./views/Logs.vue";
 import About from "./views/About.vue";
 
 import "./filters";
+
+import UtilService from "./utils";
+Vue.mixin(UtilService);
 
 Vue.config.productionTip = false;
 
@@ -67,6 +79,10 @@ const router = new Router({
     {
       path: "/configuration",
       component: Configuration
+    },
+    {
+      path: "/bypass",
+      component: Bypass
     },
     {
       path: "/logs",

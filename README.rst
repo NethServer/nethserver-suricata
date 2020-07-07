@@ -25,6 +25,28 @@ Disabling: ::
   signal-event firewall-adjust
   signal-event nethserver-suricata-save
 
+Bypass
+======
+
+All bypasses are saved inside the ``ips`` database.
+
+Each record with ``bypass`` type has the following properties:
+
+- ``Host``: it can be a firewall object or a raw IP/CIDR address
+- ``status``: it can be ``enabled`` or ``disabled``
+- ``Description``: optional description
+
+Example: ::
+
+  bypass1=bypass
+    Description=
+    Host=host;test1
+    status=enabled
+  bypass2=bypass
+    Description=
+    Host=192.168.0.1
+    status=disabled
+
 
 Troubleshooting
 ===============

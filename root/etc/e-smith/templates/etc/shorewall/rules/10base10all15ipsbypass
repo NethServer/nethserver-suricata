@@ -1,0 +1,30 @@
+#
+# 10base10all15ipsbypass
+#
+{
+    use NethServer::Firewall;
+
+    my $fw = new NethServer::Firewall();
+    my $ipsdb = esmith::ConfigDB->open_ro('ips');
+
+    my @ips_records = $ipsdb->get_all_by_prop('type' => 'bypass');
+
+    my $status = $suricata{'status'} || 'disabled';
+
+    if ($status eq 'enabled' and scalar(@ips_records) > 0) {
+
+        foreach my $bypass (@ips_records) {
+            my %props = $bypass->props;
+
+            if ($props{'status'} eq 'enabled') {
+                my $addr = $fw->getAddress($props{'Host'});
+                my $value = $fw->getZone($addr);
+                $OUT .= "?COMMENT IPS bypass $addr\n";
+                $OUT .= "{source:$value, dest:any, action:MARK(|0x10)}\n";
+                $OUT .= "{source:any, dest:$value, action:MARK(|0x10)}\n";
+            }
+        }
+        # cleanup shorewall comment
+        $OUT .= "?COMMENT\n";
+    }
+}
