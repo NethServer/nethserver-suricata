@@ -44,7 +44,11 @@ while ($db->get($name)) {
 
 my $obj = {Description => $input->{'Description'}, type => $input->{'type'}, 'status' => 'enabled'};
 if ($input->{'Host'}) {
-    $obj->{'Host'} = $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'};
+    if($input->{'Host'}{'type'} eq 'raw') {
+        $obj->{'Host'} = $input->{'Host'}{'name'};
+    } else {
+        $obj->{'Host'} = $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'};
+    }
 }
 
 $db->new_record($name, $obj);

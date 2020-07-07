@@ -31,19 +31,17 @@ $v = new LegacyValidator($data);
     $fdb = new EsmithDatabase('ips');
 
     # search for existing bypass with the same Host
-    if (($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') && $data['type'] == 'bypass-src') {
-        foreach ($fdb->getAll('bypass-src') as $bypass) {
-            list($type, $name) = explode(";",$bypass['Host']);
-            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
-                $v->addValidationError('Host', 'source_already_exists');
+    if (($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') && $data['type'] == 'bypass') {
+        foreach ($fdb->getAll('bypass') as $bypass) {
+            # check if bypass is raw (like an IP) or not
+            if (strpos($bypass['Host'], ';') !== false) {
+                list($type, $name) = explode(";", $bypass['Host']);
+            } else {
+                $name = $bypass['Host'];
             }
-        }
-    }
-    if (($data['action'] == 'create-bypass' || $data['action'] == 'update-bypass') && $data['type'] == 'bypass-dst') {
-        foreach ($fdb->getAll('bypass-dst') as $bypass) {
-            list($type, $name) = explode(";",$bypass['Host']);
-            if ($data['Host']['name'] == $name && $data['Host']['type'] == $type) {
-                $v->addValidationError('Host', 'destination_already_exists');
+
+            if ($data['Host']['name'] == $name) {
+                $v->addValidationError('Host', 'bypass_already_exists');
             }
         }
     }
