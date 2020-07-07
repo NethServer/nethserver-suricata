@@ -76,6 +76,9 @@ rule-files:
         }
     }
 
+    if ( -f "/etc/suricata/rules/custom.rules" ) {
+        $OUT .= " - custom.rules\n";
+    }
 }
 
 classification-file: /etc/suricata/classification.config
