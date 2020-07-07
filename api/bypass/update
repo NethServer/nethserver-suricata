@@ -34,7 +34,11 @@ if ($cmd eq 'update-bypass') {
     $db->set_prop($input->{'name'}, 'Description', $input->{'Description'});
 
     if ($input->{'Host'}) {
-        $db->set_prop($input->{'name'}, 'Host', $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'});
+        if($input->{'Host'}{'type'} eq 'raw') {
+            $db->set_prop($input->{'name'}, 'Host', $input->{'Host'}{'name'});
+        } else {
+            $db->set_prop($input->{'name'}, 'Host', $input->{'Host'}{'type'}.";".$input->{'Host'}{'name'});
+        }
     }
 
 } elsif ($cmd eq 'enable-bypass' || $cmd eq 'disable-bypass') {
