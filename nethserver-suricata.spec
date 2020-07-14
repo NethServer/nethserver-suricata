@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.0.0
+Version: 2.1.0
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Tue Jul 14 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.1.0-1
+- Suricata: add IPS bypass - NethServer/dev#6222
+
 * Thu Jul 02 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.0.0-1
 - Switch suricata to repeat mode - NethServer/dev#6205
 - Human readable numbers in Cockpit dashboards - NethServer/dev#6206
