@@ -3,5 +3,6 @@
     if ($status eq 'enabled') {
         $OUT.="ACCEPT \$FW \$FW\n";
         $OUT.="NFQUEUE(bypass) all+ all+ - - - - - - !0x10/0x10\n";
+        $OUT.="MARK(&0xffef) all+ all+\n";
     }
 }

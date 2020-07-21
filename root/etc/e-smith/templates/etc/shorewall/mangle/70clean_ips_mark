@@ -1,3 +1,0 @@
-# 70clean_ips_mark
-# clean ips marker before saving to connmark
-MARK(&0xffef):T - - - - - - 0x10/0x10
