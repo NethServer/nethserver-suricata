@@ -391,6 +391,11 @@ export default {
         type: "bypass"
       };
 
+      // check bypass type
+      if (bypassObj.Host.type != 'host' && bypassObj.Host.type != 'host-group' && bypassObj.Host.type != 'cidr' && bypassObj.Host.type != 'iprange') {
+        bypassObj.Host.type = 'host';
+      }
+
       context.currentBypass.isLoading = true;
       context.$forceUpdate();
       nethserver.exec(
