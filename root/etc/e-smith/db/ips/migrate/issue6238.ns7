@@ -1,0 +1,29 @@
+{
+  #
+  # issue 6238 -- Convert 'local;ip_addr' records to 'host;ip_addr'
+  #
+
+  # open ips db
+  my $ipsdb = esmith::ConfigDB->open('ips');
+
+  # get all bypass records
+  my @ips_records = $ipsdb->get_all_by_prop('type' => 'bypass');
+
+  # run migration
+  if (scalar(@ips_records) > 0) {
+
+    # loop all keys
+    foreach my $bypass (@ips_records) {
+      
+      # check if local type exists
+      my ($type, $name) = split(';', $bypass->prop('Host'));
+
+      if ($type eq 'local') {
+        # set host type
+        $bypass->set_prop('Host', "host;$name");
+      }
+    }
+  }
+
+  '';
+}

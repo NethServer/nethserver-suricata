@@ -67,7 +67,7 @@ if ($cmd eq 'bypass-list') {
 	# convert type local to host
 	if($props{'type'} eq 'local') {
             $props{'type'} = 'host';
-        }	
+	}	
 
         push(@objects, \%props);
     }
