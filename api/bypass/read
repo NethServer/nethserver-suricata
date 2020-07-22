@@ -63,6 +63,12 @@ if ($cmd eq 'bypass-list') {
     foreach ($hdb->get_all()) {
         my %props = $_->props;
         $props{'name'} = $_->key;
+	
+	# convert type local to host
+	if($props{'type'} eq 'local') {
+            $props{'type'} = 'host';
+        }	
+
         push(@objects, \%props);
     }
 
