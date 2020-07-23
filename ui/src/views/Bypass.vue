@@ -292,7 +292,7 @@ export default {
             bypass.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
           (bypass.Address &&
             bypass.Address.toLowerCase().includes(query.toLowerCase()))
-        );
+        ) && !(bypass.type == 'self');
       });
     },
     selectBypassAuto(item) {
