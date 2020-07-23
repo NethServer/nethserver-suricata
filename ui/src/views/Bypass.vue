@@ -292,7 +292,7 @@ export default {
             bypass.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
           (bypass.Address &&
             bypass.Address.toLowerCase().includes(query.toLowerCase()))
-        );
+        ) && !(bypass.type == 'self');
       });
     },
     selectBypassAuto(item) {
@@ -390,6 +390,11 @@ export default {
         name: bypass.isEdit ? bypass.name : null,
         type: "bypass"
       };
+
+      // check bypass type
+      if (bypassObj.Host.type != 'host' && bypassObj.Host.type != 'host-group' && bypassObj.Host.type != 'cidr' && bypassObj.Host.type != 'iprange') {
+        bypassObj.Host.type = 'host';
+      }
 
       context.currentBypass.isLoading = true;
       context.$forceUpdate();
