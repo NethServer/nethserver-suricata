@@ -285,14 +285,16 @@ export default {
 
       return this.objects.filter(function(bypass) {
         return (
-          bypass.type.toLowerCase().includes(query.toLowerCase()) ||
-          bypass.name.toLowerCase().includes(query.toLowerCase()) ||
-          bypass.Description.toLowerCase().includes(query.toLowerCase()) ||
-          (bypass.IpAddress &&
-            bypass.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
-          (bypass.Address &&
-            bypass.Address.toLowerCase().includes(query.toLowerCase()))
-        ) && !(bypass.type == 'self');
+          (bypass.type.toLowerCase().includes(query.toLowerCase()) ||
+            bypass.name.toLowerCase().includes(query.toLowerCase()) ||
+            (bypass.Description &&
+              bypass.Description.toLowerCase().includes(query.toLowerCase())) ||
+            (bypass.IpAddress &&
+              bypass.IpAddress.toLowerCase().includes(query.toLowerCase())) ||
+            (bypass.Address &&
+              bypass.Address.toLowerCase().includes(query.toLowerCase()))) &&
+          !(bypass.type == "self")
+        );
       });
     },
     selectBypassAuto(item) {
@@ -392,8 +394,14 @@ export default {
       };
 
       // check bypass type
-      if (bypassObj.Host.type != 'host' && bypassObj.Host.type != 'host-group' && bypassObj.Host.type != 'cidr' && bypassObj.Host.type != 'iprange') {
-        bypassObj.Host.type = 'host';
+      if (
+        bypassObj.Host.type != "raw" &&
+        bypassObj.Host.type != "host" &&
+        bypassObj.Host.type != "host-group" &&
+        bypassObj.Host.type != "cidr" &&
+        bypassObj.Host.type != "iprange"
+      ) {
+        bypassObj.Host.type = "host";
       }
 
       context.currentBypass.isLoading = true;
