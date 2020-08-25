@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.1.1
+Version: 2.1.2
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Tue Aug 25 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.1.2-1
+- IPS: can't create raw IP bypasses - Bug NethServer/dev#6245
+
 * Thu Jul 23 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.1.1-1
 - IPS local bypass type - Bug NethServer/dev#6238
 - IPS: some IPsec traffic blocked - Bug NethServer/dev#6236
