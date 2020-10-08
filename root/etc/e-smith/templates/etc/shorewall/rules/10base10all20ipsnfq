@@ -5,6 +5,10 @@
     my $status = $suricata{'status'} || 'enabled';
     if ($status eq 'enabled') {
         chomp(my $cpu_count = `nproc --all`);
+        # max number of queues is 16
+        if ($cpu_count > 16) {
+            $cpu_count = 16;
+        }
         my $nfq = '';
         if ($cpu_count > 1) {
             $nfq = "--queue-balance 0:" . ($cpu_count - 1) . " --queue-cpu-fanout";

@@ -7,6 +7,10 @@
 # Add options to be passed to the daemon
 {
   chomp(my $cpu_count = `nproc --all`);
+  # max number of queues is 16
+  if ($cpu_count > 16) {
+      $cpu_count = 16;
+  }
   my $nfq = '';
   for (my $q = 0; $q < $cpu_count; $q++) {
     $nfq .= "-q $q ";
