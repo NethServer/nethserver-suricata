@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.2.0
+Version: 2.2.1
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Thu Oct 08 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.1-1
+- Suricata doesn't start on systems with more than 16 CPUs - Bug NethServer/dev#6297
+
 * Fri Oct 02 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.2.0-1
 - Improve IPS performances - NethServer/dev#6283
 
