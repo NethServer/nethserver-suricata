@@ -20,8 +20,8 @@
                 my $addr = $fw->getAddress($props{'Host'}) || next;
                 my $value = $fw->getZone($addr);
                 $OUT .= "?COMMENT IPS bypass $addr\n";
-                $OUT .= "{source:$value, dest:any, action:MARK(|0x10)}\n";
-                $OUT .= "{source:any, dest:$value, action:MARK(|0x10)}\n";
+                $OUT .= "{source:$value, dest:any+, action:MARK(|0x10)}\n";
+                $OUT .= "{source:any+, dest:$value, action:MARK(|0x10)}\n";
             }
         }
         # cleanup shorewall comment
