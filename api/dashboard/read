@@ -99,7 +99,7 @@ if ($cmd eq 'statistics') {
 
     # calculate Evebox URL
     my $hostname = $input->{'hostname'};
-    $ret->{'url'} = "https://$hostname/".$db->get_prop('evebox','alias')."/";
+    $ret->{'url'} = "https://$hostname:980/".$db->get_prop('evebox','alias');
 
 } elsif ($cmd eq 'status') {
 
