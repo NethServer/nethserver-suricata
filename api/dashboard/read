@@ -64,7 +64,7 @@ sub sorted_array
 my $db = esmith::ConfigDB->open_ro();
 if ($cmd eq 'statistics') {
     $ret = { alerts => undef, counters => { 'uptime' => 0, rules_loaded => 0, rules_failed => 0 }};
-    my $out = `curl --connect-timeout 2  -G http://localhost:5636/api/1/alerts -d time_range=864000s -s`;
+    my $out = `curl --connect-timeout 2  -G http://localhost:5636/api/1/alerts -d time_range=14400s -s`;
     my $eve = safe_decode_json($out);
     my $total = 0;
     my (%categories, %src, %dst);
