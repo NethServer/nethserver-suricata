@@ -30,7 +30,7 @@
         {{$t('dashboard.evebox')}}
         <span
           class="gray min-size right"
-        >{{$t('dashboard.last_updated_24h')}}</span>
+        >{{$t('dashboard.last_updated_4h')}}</span>
       </h2>
       <div class="row">
         <div class="col-sm-6">
