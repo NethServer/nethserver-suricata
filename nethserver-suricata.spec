@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.3.1
+Version: 2.3.2
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Wed Dec 16 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.3.2-1
+- Suricata dashboard needs a long time to be loaded - Bug NethServer/dev#6357
+
 * Wed Nov 25 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.3.1-1
 - Access web applications from port 980 - NethServer/dev#6344
 - Intra-zone IPS bypass - Bug NethServer/dev#6342
