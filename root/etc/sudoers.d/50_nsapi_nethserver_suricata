@@ -5,6 +5,11 @@ Cmnd_Alias NSAPI_NETHSERVER_SURICATA = \
     /usr/libexec/nethserver/api/nethserver-suricata/configuration/read, \
     /usr/libexec/nethserver/api/nethserver-suricata/configuration/update, \
     /usr/libexec/nethserver/api/nethserver-suricata/configuration/validate, \
-    /usr/libexec/nethserver/api/nethserver-suricata/dashboard/read
+    /usr/libexec/nethserver/api/nethserver-suricata/dashboard/read, \
+    /usr/libexec/nethserver/api/nethserver-suricata/bypass/create, \
+    /usr/libexec/nethserver/api/nethserver-suricata/bypass/delete, \
+    /usr/libexec/nethserver/api/nethserver-suricata/bypass/read, \
+    /usr/libexec/nethserver/api/nethserver-suricata/bypass/update, \
+    /usr/libexec/nethserver/api/nethserver-suricata/bypass/validate
 
 Defaults!NSAPI_NETHSERVER_SURICATA !requiretty
