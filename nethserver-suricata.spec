@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.3.3
+Version: 2.3.4
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Tue Jun 22 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.3.4-1
+- Bypass IPS can't be delegated - Bug NethServer/dev#6529
+
 * Mon Jan 11 2021 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.3.3-1
 - UI issue on tables using vue-good-table - Bug NethServer/dev#6390
 
