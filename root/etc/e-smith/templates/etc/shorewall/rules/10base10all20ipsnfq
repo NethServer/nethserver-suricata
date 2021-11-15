@@ -14,6 +14,7 @@
             $nfq = "--queue-balance 0:" . ($cpu_count - 1) . " --queue-cpu-fanout";
         }
         $OUT.="ACCEPT \$FW \$FW\n";
+        $OUT.="INLINE all+ all+ - - - - - - 0x20/0x20; -j MARK --set-mark 0x10/0x10\n";
         $OUT.="INLINE all+ all+ - - - - - - !0x10/0x10; -j NFQUEUE --queue-bypass $nfq\n";
         $OUT.="MARK(&0xffef) all+ all+\n";
     }
