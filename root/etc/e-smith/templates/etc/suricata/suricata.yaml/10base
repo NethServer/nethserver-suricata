@@ -808,7 +808,7 @@ app-layer:
       #
       # For best performance, select 'bypass'.
       #
-      #encryption-handling: default
+      encryption-handling: bypass
 
     dcerpc:
       enabled: yes
@@ -1381,6 +1381,7 @@ stream:
   memcap: 64mb
   checksum-validation: yes      # reject wrong csums
   inline: auto                  # auto will use inline mode in IPS mode, yes or no set it statically
+  bypass: yes                   # Bypass packets when stream.depth is reached
   reassembly:
     memcap: 256mb
     depth: 1mb                  # reassemble 1mb into a stream
@@ -1665,8 +1666,8 @@ nfq:
   mode: repeat
   repeat-mark: 16
   repeat-mask: 16
-#  bypass-mark: 1
-#  bypass-mask: 1
+  bypass-mark: 32
+  bypass-mask: 32
 #  route-queue: 2
 #  batchcount: 20
   fail-open: yes
