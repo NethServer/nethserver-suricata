@@ -1382,6 +1382,7 @@ stream:
   checksum-validation: yes      # reject wrong csums
   inline: auto                  # auto will use inline mode in IPS mode, yes or no set it statically
   bypass: yes                   # Bypass packets when stream.depth is reached
+  drop-invalid: no
   reassembly:
     memcap: 256mb
     depth: 1mb                  # reassemble 1mb into a stream
