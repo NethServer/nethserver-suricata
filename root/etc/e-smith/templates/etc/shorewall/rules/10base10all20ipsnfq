@@ -16,6 +16,8 @@
         $OUT.="ACCEPT \$FW \$FW\n";
         $OUT.="INLINE all+ all+ - - - - - - 0x20/0x20; -j MARK --set-mark 0x10/0x10\n";
         $OUT.="INLINE all+ all+ - - - - - - !0x10/0x10; -j NFQUEUE --queue-bypass $nfq\n";
+        $OUT.="# Save the bypass mark immediately in the connection\n";
+        $OUT.="CONNMARK(|0x20) all+ all+ - - - - - - 0x20/0x20\n";
         $OUT.="MARK(&0xffef) all+ all+\n";
     }
 }
