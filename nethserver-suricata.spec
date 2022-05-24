@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.5.0
+Version: 2.5.1
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Tue May 24 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.5.1-1
+- Suricata 5 - NethServer/dev#6661
+
 * Tue Jan 18 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.5.0-1
 - IPS silently discarding some packets - Bug NethServer/dev#6626
 
