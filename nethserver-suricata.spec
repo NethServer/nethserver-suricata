@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.5.2
+Version: 2.5.3
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Wed Jul 06 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.5.3-1
+- QoS bandwidth limits ignored with Suricata IPS enabled - Bug NethServer/dev#6681
+
 * Tue Jun 21 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.5.2-1
 - Suricata memory usage during some SMB file transfers - Bug NethServer/dev#6677
 
