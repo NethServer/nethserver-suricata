@@ -1665,10 +1665,10 @@ profiling:
 # directly accept all packets of a flow once a packet has been marked.
 nfq:
   mode: repeat
-  repeat-mark: 16
-  repeat-mask: 16
-  bypass-mark: 32
-  bypass-mask: 32
+  repeat-mark: 64
+  repeat-mask: 64
+  bypass-mark: 128
+  bypass-mask: 128
 #  route-queue: 2
 #  batchcount: 20
   fail-open: yes

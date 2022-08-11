@@ -14,10 +14,10 @@
             $nfq = "--queue-balance 0:" . ($cpu_count - 1) . " --queue-cpu-fanout";
         }
         $OUT.="ACCEPT \$FW \$FW\n";
-        $OUT.="INLINE all+ all+ - - - - - - 0x80/0x80; -j MARK --set-mark 0x10/0x10\n";
-        $OUT.="INLINE all+ all+ - - - - - - !0x10/0x10; -j NFQUEUE --queue-bypass $nfq\n";
-        $OUT.="# Save the bypass mark immediately in the connection\n";
-        $OUT.="CONNMARK(|0x80) all+ all+ - - - - - - 0x20/0x20\n";
-        $OUT.="MARK(&0xffef) all+ all+\n";
+        $OUT.="INLINE all+ all+ - - - - - - 0x80/0x80; -j MARK --set-mark 0x40/0x40\n";
+        $OUT.="INLINE all+ all+ - - - - - - !0x40/0x40; -j NFQUEUE --queue-bypass $nfq\n";
+        $OUT.="# Save the bypass mark immediately in the connection for traffic to $FW\n";
+        $OUT.="CONNMARK(|0x80) all+ all+ - - - - - - 0x80/0x80\n";
+        $OUT.="MARK(&0xffbf) all+ all+\n";
     }
 }
