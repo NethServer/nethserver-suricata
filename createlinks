@@ -79,3 +79,11 @@ event_templates($event,
 
 event_services($event, 'suricata' => 'restart');
 
+#--------------------------------------------------
+# actions for post-restore-data event
+#--------------------------------------------------
+
+$event = "post-restore-data";
+event_actions($event, 
+   'nethserver-suricata-fix-rsync-perms' => '10',
+);
