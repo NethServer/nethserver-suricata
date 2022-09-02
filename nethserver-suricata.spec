@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.6.0
+Version: 2.6.1
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Fri Sep 02 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.6.1-1
+- rsync disaster recovery introduces permissions issue - Bug NethServer/dev#6691
+
 * Tue Aug 30 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.6.0-1
 - QoS class #16 is not respected - Bug NethServer/dev#6690
 
