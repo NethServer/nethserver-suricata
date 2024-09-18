@@ -10,8 +10,9 @@
     }
 
     $blockCategories = $DB->get_prop('suricata', 'BlockCategories') || '';
+    $blockCategories =~ s/ET-emerging-malware//;
     if ($blockCategories =~ s/ET-emerging-trojan/ET-emerging-malware/) {
         rename("/etc/suricata/rules/ET-emerging-trojan.rules", "/etc/suricata/rules/ET-emerging-malware.rules");
-        $DB->set_prop('suricata', 'BlockCategories', $blockCategories);
     }
+    $DB->set_prop('suricata', 'BlockCategories', $blockCategories);
 }
