@@ -1,0 +1,17 @@
+{
+    #
+    # issue 7029 -- Rename trojan to malware
+    #
+
+    $alertCategories = $DB->get_prop('suricata', 'AlertCategories') || '';
+    if ($alertCategories =~ s/ET-emerging-trojan/ET-emerging-malware/) {
+        rename("/etc/suricata/rules/ET-emerging-trojan.rules", "/etc/suricata/rules/ET-emerging-malware.rules");
+        $DB->set_prop('suricata', 'AlertCategories', $alertCategories);
+    }
+
+    $blockCategories = $DB->get_prop('suricata', 'BlockCategories') || '';
+    if ($blockCategories =~ s/ET-emerging-trojan/ET-emerging-malware/) {
+        rename("/etc/suricata/rules/ET-emerging-trojan.rules", "/etc/suricata/rules/ET-emerging-malware.rules");
+        $DB->set_prop('suricata', 'BlockCategories', $blockCategories);
+    }
+}
