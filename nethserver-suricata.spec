@@ -1,6 +1,6 @@
 Summary: NethServer Suricata IPS module
 Name: nethserver-suricata
-Version: 2.6.2
+Version: 2.6.3
 Release: 1%{?dist}
 License: GPL
 Source0: %{name}-%{version}.tar.gz
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0440,root,root) /etc/sudoers.d/20_nethserver_suricata
 
 %changelog
+* Thu Sep 19 2024 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.6.3-1
+- PulledPork: Issues Downloading ET Rules - Bug NethServer/dev#7029
+
 * Mon Sep 19 2022 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 2.6.2-1
 - Configured Suricata IPS bypasses are ineffective - Bug NethServer/dev#6697
 
